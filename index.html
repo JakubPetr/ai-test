@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Výhledy Václavice | Prodej stavebních pozemků</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  />
+  <style>
+    :root {
+      --forest: #3f5a4a;
+      --olive: #6f8f59;
+      --meadow: #a7ba7b;
+      --mist: #f5f6f3;
+      --ink: #223028;
+    }
+
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .navbar {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .btn-brand {
+      background: var(--forest);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-brand:hover {
+      background: #344b3d;
+      color: #fff;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--mist), #fff 60%);
+    }
+
+    .hero-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(34, 48, 40, 0.12);
+    }
+
+    .badge-brand {
+      background: rgba(63, 90, 74, 0.1);
+      color: var(--forest);
+      letter-spacing: 0.08em;
+    }
+
+    .section-title span {
+      color: var(--forest);
+    }
+
+    .feature-card {
+      border: 1px solid rgba(63, 90, 74, 0.15);
+      border-radius: 20px;
+      padding: 24px;
+      height: 100%;
+      background: #fff;
+    }
+
+    .timeline {
+      border-left: 2px solid rgba(63, 90, 74, 0.2);
+      padding-left: 24px;
+    }
+
+    .timeline-item {
+      margin-bottom: 24px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: var(--forest);
+      display: inline-block;
+      border-radius: 50%;
+      margin-left: -30px;
+      margin-right: 16px;
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--forest), #2c3f34);
+      color: #fff;
+      border-radius: 28px;
+    }
+
+    .price-tag {
+      background: var(--forest);
+      color: #fff;
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .map-card {
+      background: var(--mist);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .logo-text {
+      font-family: "Georgia", "Times New Roman", serif;
+      letter-spacing: 0.2em;
+      font-weight: 600;
+      color: var(--forest);
+    }
+
+    .footer {
+      background: var(--mist);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+        <span class="d-inline-flex align-items-center">
+          <svg width="54" height="54" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="120" height="120" fill="none" />
+            <path d="M18 60c12-8 24-12 36-12 12 0 22 3 34 9 10 5 22 7 32 7-8 4-20 7-30 8-12 1-22-2-34-6-10-3-18-3-26-1-10 2-20 6-30 13 3-7 9-14 18-18Z" fill="#6f8f59" />
+            <path d="M14 78c10-8 22-12 36-12 14 0 26 3 38 9 10 5 20 7 32 7-6 4-18 7-28 8-14 1-26-3-38-7-12-4-22-3-32 0-10 3-20 8-28 16 2-7 8-14 20-21Z" fill="#3f5a4a" />
+            <path d="M30 52l6-12 6 12h-4l4 8h-12l4-8h-4Z" fill="#3f5a4a" />
+            <path d="M46 42l8-16 8 16h-5l5 10h-16l5-10h-5Z" fill="#3f5a4a" />
+            <path d="M66 46l6-12 6 12h-4l4 8h-12l4-8h-4Z" fill="#3f5a4a" />
+            <path d="M82 40l7-14 7 14h-4l4 9h-14l4-9h-4Z" fill="#3f5a4a" />
+          </svg>
+        </span>
+        <div class="d-none d-sm-block">
+          <div class="logo-text">VÝHLEDY</div>
+          <small class="text-uppercase text-muted" style="letter-spacing: 0.3em;">Václavice</small>
+        </div>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="#o-projektu">O projektu</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pozemky">Pozemky</a></li>
+          <li class="nav-item"><a class="nav-link" href="#lokalita">Lokalita</a></li>
+          <li class="nav-item"><a class="nav-link" href="#infrastruktura">Infrastruktura</a></li>
+        </ul>
+        <a class="btn btn-brand ms-lg-4" href="#kontakt">Domluvit prohlídku</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero py-5">
+    <div class="container py-lg-5">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <span class="badge badge-brand px-3 py-2">PRODEJ STAVEBNÍCH POZEMKŮ</span>
+          <h1 class="display-5 fw-semibold mt-3">Výhledy Václavice — místo, kde se venkovský klid potkává s městem.</h1>
+          <p class="lead text-muted mt-3">
+            Projekt nabízí 7 zastavitelných pozemků v klidné lokalitě Václavice u Hrádku nad Nisou. Revitalizovaný zemědělský areál na okraji obce garantuje soukromí a jistotu bez další nové zástavby.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <div class="price-tag">2 175 000 Kč · 870 m²</div>
+            <div class="align-self-center text-muted">2 500 Kč/m²</div>
+          </div>
+          <div class="d-flex gap-3 mt-4">
+            <a class="btn btn-brand btn-lg" href="#pozemky">Vybrat pozemek</a>
+            <a class="btn btn-outline-secondary btn-lg" href="#lokalita">Poznat lokalitu</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-card p-4 p-lg-5">
+            <h2 class="h4 fw-semibold">Rychlé info</h2>
+            <div class="row mt-4 g-3">
+              <div class="col-6">
+                <div class="text-muted text-uppercase small">Počet pozemků</div>
+                <div class="h5">7</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted text-uppercase small">Velikosti</div>
+                <div class="h5">460 m² · 870 m²</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted text-uppercase small">Dojezd</div>
+                <div class="h5">Liberec 15 min</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted text-uppercase small">Příroda</div>
+                <div class="h5">Ještěd · Lužické hory</div>
+              </div>
+            </div>
+            <hr class="my-4" />
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle p-3" style="background: rgba(167,186,123,0.2);">
+                <strong class="text-success">✓</strong>
+              </div>
+              <div>
+                <div class="fw-semibold">Územní studie hotová</div>
+                <small class="text-muted">Jednodušší povolovací proces rodinných domů.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="o-projektu" class="py-5">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h2 class="section-title fw-semibold">Projekt <span>Výhledy Václavice</span></h2>
+          <p class="text-muted">
+            Vznikl citlivou revitalizací zemědělského areálu na okraji obce. Nabízí tři menší pozemky (cca 460 m²) a čtyři větší (cca 870 m²) určené k výstavbě rodinných domů venkovského charakteru.
+          </p>
+          <p class="text-muted">
+            Územní plán města Hrádek nad Nisou zařazuje lokalitu mezi plochy pro bydlení. Vyhotovená územní studie je zapsána v evidenci územně plánovacích podkladů a určuje budoucí rozvoj lokality.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="feature-card">
+                <h3 class="h6 text-uppercase">Klidný okraj obce</h3>
+                <p class="text-muted">Bez plánované další zástavby v bezprostředním sousedství.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="feature-card">
+                <h3 class="h6 text-uppercase">Venkovský charakter</h3>
+                <p class="text-muted">Koncept rodinných domů respektuje krajinu a místní charakter.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="feature-card">
+                <h3 class="h6 text-uppercase">Příroda na dosah</h3>
+                <p class="text-muted">Výhledy na Ještědský hřeben a Lužické hory.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="feature-card">
+                <h3 class="h6 text-uppercase">Komunita 632 obyvatel</h3>
+                <p class="text-muted">Malebná obec v údolí Václavického potoka.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pozemky" class="py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center mb-4">
+        <div class="col-lg-8">
+          <h2 class="section-title fw-semibold">Nabídka <span>pozemků</span></h2>
+          <p class="text-muted">Všechny pozemky mají samostatné přípojky vody, elektrické energie a optické sítě s možností vysokorychlostního internetu.</p>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="h5">Pozemek 870 m²</h3>
+              <span class="badge bg-success">2 175 000 Kč</span>
+            </div>
+            <p class="text-muted mt-2">Větší pozemek s přímým výhledem na okolní krajinu. Ideální pro rodinný dům s větší zahradou.</p>
+            <ul class="list-unstyled text-muted">
+              <li>✓ Cena 2 500 Kč/m²</li>
+              <li>✓ Napojení na vodu a elektřinu</li>
+              <li>✓ Připravená optická síť</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="h5">Pozemek 460 m²</h3>
+              <span class="badge bg-secondary">na dotaz</span>
+            </div>
+            <p class="text-muted mt-2">Kompaktní parcela vhodná pro útulný rodinný dům venkovského charakteru.</p>
+            <ul class="list-unstyled text-muted">
+              <li>✓ Územní studie pro lokalitu</li>
+              <li>✓ Snadný přístup z nové komunikace</li>
+              <li>✓ Dostupné MŠ, restaurace, sport</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="h5">Vnitřní infrastruktura</h3>
+              <span class="badge bg-success-subtle text-success">Nová</span>
+            </div>
+            <p class="text-muted mt-2">Součástí projektu je nová vnitřní příjezdová komunikace pro pohodlný příjezd k pozemkům.</p>
+            <ul class="list-unstyled text-muted">
+              <li>✓ Příjezdová cesta v lokalitě</li>
+              <li>✓ Samostatné přípojky</li>
+              <li>✓ Vlastní DČOV nebo jímka</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lokalita" class="py-5">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h2 class="section-title fw-semibold">Lokalita, která <span>šetří čas</span></h2>
+          <p class="text-muted">Václavice leží v údolí Václavického potoka. Do Chrastavy dojedete za 5 minut, do Hrádku nad Nisou za 10 minut a do Liberce za 15 minut.</p>
+          <div class="timeline mt-4">
+            <div class="timeline-item">
+              <strong>Chrastava · 5 min</strong>
+              <div class="text-muted">Obchody, školy a další služby.</div>
+            </div>
+            <div class="timeline-item">
+              <strong>Hrádek nad Nisou · 10 min</strong>
+              <div class="text-muted">Vlakové a autobusové nádraží, pošta, větší obchody.</div>
+            </div>
+            <div class="timeline-item">
+              <strong>Liberec · 15 min</strong>
+              <div class="text-muted">Krajské město s kompletní občanskou vybaveností.</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="map-card">
+            <h3 class="h5">V okolí najdete</h3>
+            <ul class="list-unstyled mt-3 text-muted">
+              <li>• Mateřská škola (cca 2 km)</li>
+              <li>• Autobusové zastávky (nejbližší 520 m)</li>
+              <li>• Dvě restaurace, sportovní areál</li>
+              <li>• Malebný rybníček v sousedství (2 min chůze)</li>
+            </ul>
+            <hr />
+            <h4 class="h6 text-uppercase">Volný čas</h4>
+            <ul class="list-unstyled text-muted">
+              <li>• Výšlap na vrcholek Výhledy (cca 30 min)</li>
+              <li>• Hrad Grabštejn (3 km)</li>
+              <li>• Jezero Kristýna a Žitavské jezero</li>
+              <li>• Cyklostezky až do Německa a Polska</li>
+              <li>• Zámek Lemberk</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="infrastruktura" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="section-title fw-semibold">Technická <span>infrastruktura</span></h2>
+      <div class="row g-3 mt-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h3 class="h6 text-uppercase">Přípojky na pozemku</h3>
+            <p class="text-muted">Samostatná vodovodní přípojka a elektrická energie ke každému pozemku.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h3 class="h6 text-uppercase">Optická síť</h3>
+            <p class="text-muted">Připraveno pro vysokorychlostní internet.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h3 class="h6 text-uppercase">DČOV nebo jímka</h3>
+            <p class="text-muted">Nutnost vybudování vlastní čistírny nebo jímky pro každý dům.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="py-5">
+    <div class="container">
+      <div class="cta p-4 p-lg-5">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-8">
+            <h2 class="fw-semibold">Domluvte si prohlídku nebo si vyžádejte detailní nabídku.</h2>
+            <p class="mb-0">Rádi vám představíme jednotlivé parcely i plánovanou infrastrukturu.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a class="btn btn-light btn-lg" href="mailto:info@vyhledy-vaclavice.cz">Kontaktovat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <div>
+        <div class="logo-text">VÝHLEDY VÁCLAVICE</div>
+        <small class="text-muted">Prodej stavebních pozemků · Hrádek nad Nisou</small>
+      </div>
+      <div class="text-muted">© 2024 Výhledy Václavice</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('a.nav-link').forEach((link) => {
+      link.addEventListener('click', () => {
+        const menu = document.querySelector('#navMenu');
+        if (menu.classList.contains('show')) {
+          bootstrap.Collapse.getOrCreateInstance(menu).hide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
