@@ -34,6 +34,12 @@ interface PdfJsPage {
   render(options: { canvasContext: CanvasRenderingContext2D; viewport: { width: number; height: number; scale: number } }): { promise: Promise<void> };
 }
 
+interface PendingPlacement {
+  x: number;
+  y: number;
+  pageIndex: number;
+}
+
 (pdfjsLib as unknown as { GlobalWorkerOptions: { workerSrc: string } }).GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 
 @Component({
@@ -60,6 +66,7 @@ export class AppComponent {
   private pdfBytes: Uint8Array | null = null;
   private pdfDoc: PdfJsDocument | null = null;
   private scale = 1.3;
+  private pendingPosition?: PendingPlacement;
   items: OverlayItem[] = [];
   selectedItemId: string | null = null;
 
@@ -69,7 +76,17 @@ export class AppComponent {
 
   setTool(tool: Tool): void {
     this.tool = tool;
-    this.status = `Aktivní nástroj: ${tool}`;
+    if (tool === 'addText') {
+      this.status = 'Klikněte do PDF náhledu na místo, kam chcete vložit text.';
+    } else if (tool === 'addImage') {
+      this.status = 'Klikněte do PDF náhledu na místo, kam chcete vložit obrázek.';
+    } else if (tool === 'replaceText') {
+      this.status = 'Klikněte do PDF náhledu na místo, kde chcete přepsat text.';
+    } else {
+      this.status = 'Aktivní nástroj: výběr.';
+    }
+
+    this.renderPages();
   }
 
   async onPdfSelected(event: Event): Promise<void> {
@@ -80,14 +97,17 @@ export class AppComponent {
     this.items = [];
     this.selectedItemId = null;
     this.currentPage = 0;
+    this.pendingPosition = undefined;
     this.pdfBytes = new Uint8Array(await file.arrayBuffer());
     await this.loadPdf(this.pdfBytes);
     this.saveDraft();
   }
 
   async onImageSelected(event: Event): Promise<void> {
-    const file = (event.target as HTMLInputElement).files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (!file) return;
+
     const dataUrl = await this.toDataUrl(file);
     this.addItem({
       type: 'image',
@@ -95,6 +115,8 @@ export class AppComponent {
       width: this.imageWidth,
       height: this.imageHeight
     });
+
+    input.value = '';
   }
 
   async generatePdf(): Promise<void> {
@@ -174,6 +196,7 @@ export class AppComponent {
     this.pdfDoc = null;
     this.items = [];
     this.selectedItemId = null;
+    this.pendingPosition = undefined;
     this.pdfWrapper.nativeElement.innerHTML = '';
     this.status = 'Rozpracovaná práce byla smazána.';
     this.fileInput.nativeElement.value = '';
@@ -191,6 +214,10 @@ export class AppComponent {
   onImageSizeChange(delta: number): void {
     this.imageWidth = Math.max(40, this.imageWidth + delta);
     this.imageHeight = Math.max(40, this.imageHeight + delta);
+  }
+
+  private isPlacementTool(): boolean {
+    return this.tool === 'addText' || this.tool === 'replaceText' || this.tool === 'addImage';
   }
 
   private async loadPdf(bytes: Uint8Array): Promise<void> {
@@ -212,6 +239,9 @@ export class AppComponent {
 
       const pageNode = document.createElement('section');
       pageNode.className = 'page';
+      if (this.isPlacementTool()) {
+        pageNode.classList.add('placement-mode');
+      }
       pageNode.style.width = `${viewport.width}px`;
       pageNode.style.height = `${viewport.height}px`;
 
@@ -224,6 +254,23 @@ export class AppComponent {
       await page.render({ canvasContext: context, viewport }).promise;
       pageNode.append(canvas);
 
+      const previewCursor = this.buildPlacementCursor();
+      pageNode.append(previewCursor);
+
+      pageNode.addEventListener('mousemove', (event) => {
+        if (!this.isPlacementTool()) return;
+        const rect = pageNode.getBoundingClientRect();
+        const x = Math.round((event.clientX - rect.left) / this.scale);
+        const y = Math.round((event.clientY - rect.top) / this.scale);
+        previewCursor.style.display = 'inline-flex';
+        previewCursor.style.left = `${x * this.scale}px`;
+        previewCursor.style.top = `${y * this.scale}px`;
+      });
+
+      pageNode.addEventListener('mouseleave', () => {
+        previewCursor.style.display = 'none';
+      });
+
       pageNode.addEventListener('click', (event) => this.onPageClick(event, index));
 
       this.items
@@ -232,6 +279,26 @@ export class AppComponent {
 
       wrapper.append(pageNode);
     }
+  }
+
+  private buildPlacementCursor(): HTMLDivElement {
+    const cursor = document.createElement('div');
+    cursor.className = 'placement-cursor';
+    cursor.style.display = 'none';
+
+    if (this.tool === 'addImage') {
+      cursor.textContent = '🖼';
+      cursor.style.width = `${this.imageWidth * this.scale}px`;
+      cursor.style.height = `${this.imageHeight * this.scale}px`;
+      cursor.style.fontSize = '20px';
+    } else {
+      cursor.textContent = this.textValue;
+      cursor.style.fontSize = `${this.fontSize * this.scale}px`;
+      cursor.style.width = 'max-content';
+      cursor.style.height = 'auto';
+    }
+
+    return cursor;
   }
 
   private onPageClick(event: MouseEvent, pageIndex: number): void {
@@ -254,20 +321,19 @@ export class AppComponent {
     }
 
     if (this.tool === 'addImage') {
+      this.pendingPosition = { x, y, pageIndex };
       this.imageInput.nativeElement.click();
-      this.status = 'Vyberte obrázek pro vložení.';
-      (this as unknown as { pendingPosition?: { x: number; y: number; pageIndex: number } }).pendingPosition = { x, y, pageIndex };
+      this.status = 'Vyberte obrázek pro vložení na zvolenou pozici.';
     }
   }
 
   private addItem(partial: Partial<OverlayItem>): void {
-    const pending = (this as unknown as { pendingPosition?: { x: number; y: number; pageIndex: number } }).pendingPosition;
     const item: OverlayItem = {
       id: crypto.randomUUID(),
       type: partial.type ?? 'text',
-      pageIndex: pending?.pageIndex ?? this.currentPage,
-      x: partial.x ?? pending?.x ?? 40,
-      y: partial.y ?? pending?.y ?? 40,
+      pageIndex: this.pendingPosition?.pageIndex ?? this.currentPage,
+      x: partial.x ?? this.pendingPosition?.x ?? 40,
+      y: partial.y ?? this.pendingPosition?.y ?? 40,
       text: partial.text,
       fontSize: partial.fontSize,
       width: partial.width,
@@ -275,8 +341,8 @@ export class AppComponent {
       imageDataUrl: partial.imageDataUrl
     };
 
+    this.pendingPosition = undefined;
     this.items = [...this.items, item];
-    (this as unknown as { pendingPosition?: { x: number; y: number; pageIndex: number } }).pendingPosition = undefined;
     this.renderPages();
     this.saveDraft();
   }

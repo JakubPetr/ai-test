@@ -94,6 +94,10 @@ h1 {
   background: white;
 }
 
+.page.placement-mode {
+  cursor: crosshair;
+}
+
 .page canvas {
   display: block;
 }
@@ -105,11 +109,28 @@ h1 {
   user-select: none;
   white-space: pre-wrap;
   color: #111827;
+  z-index: 3;
 }
 
 .overlay.selected {
   border-color: #2563eb;
   background: rgba(37, 99, 235, 0.15);
+}
+
+.placement-cursor {
+  position: absolute;
+  transform: translate(6px, 6px);
+  pointer-events: none;
+  border: 1px dashed #2563eb;
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 6px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
 }
 
 @media (max-width: 960px) {
