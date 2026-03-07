@@ -1,0 +1,33 @@
+{
+  "name": "pdf-editor-angular",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --host 0.0.0.0 --port 4173",
+    "build": "ng build",
+    "watch": "ng build --watch"
+  },
+  "dependencies": {
+    "@angular/animations": "^18.2.12",
+    "@angular/common": "^18.2.12",
+    "@angular/compiler": "^18.2.12",
+    "@angular/core": "^18.2.12",
+    "@angular/forms": "^18.2.12",
+    "@angular/platform-browser": "^18.2.12",
+    "@angular/platform-browser-dynamic": "^18.2.12",
+    "@angular/router": "^18.2.12",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
+    "rxjs": "^7.8.1",
+    "tslib": "^2.8.0",
+    "zone.js": "^0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.12",
+    "@angular/cli": "^18.2.12",
+    "@angular/compiler-cli": "^18.2.12",
+    "@types/node": "^25.3.5",
+    "typescript": "^5.5.4"
+  }
+}
