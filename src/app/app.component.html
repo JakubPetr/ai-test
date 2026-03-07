@@ -1,0 +1,52 @@
+<div class="layout">
+  <aside class="palette">
+    <h1>PDF paleta</h1>
+    <p class="hint">Pouze browser, nic se neuploaduje.</p>
+
+    <div class="row">
+      <button class="btn" (click)="fileInput.click()">Nahrát PDF</button>
+      <input #fileInput type="file" accept="application/pdf" (change)="onPdfSelected($event)" hidden>
+    </div>
+
+    <div class="tool-grid">
+      <button class="btn" [class.active]="tool==='select'" (click)="setTool('select')">Výběr</button>
+      <button class="btn" [class.active]="tool==='addText'" (click)="setTool('addText')">Text</button>
+      <button class="btn" [class.active]="tool==='replaceText'" (click)="setTool('replaceText')">Přepsat text</button>
+      <button class="btn" [class.active]="tool==='addImage'" (click)="setTool('addImage')">Obrázek</button>
+    </div>
+
+    <div class="chips">
+      <button class="chip" (click)="onTextInput('Poznámka')">Poznámka</button>
+      <button class="chip" (click)="onTextInput('Schváleno')">Schváleno</button>
+      <button class="chip" (click)="onTextInput('Doplnit')">Doplnit</button>
+      <button class="chip" (click)="onTextInput('Nový text')">Nový text</button>
+    </div>
+
+    <div class="row">
+      <span>Text: <strong>{{ textValue }}</strong></span>
+    </div>
+
+    <div class="row compact">
+      <span>Font {{ fontSize }} pt</span>
+      <button class="chip" (click)="onFontSizeChange(-2)">-</button>
+      <button class="chip" (click)="onFontSizeChange(2)">+</button>
+    </div>
+
+    <div class="row compact">
+      <span>Obrázek {{ imageWidth }}×{{ imageHeight }}</span>
+      <button class="chip" (click)="onImageSizeChange(-20)">-</button>
+      <button class="chip" (click)="onImageSizeChange(20)">+</button>
+    </div>
+
+    <div class="row actions">
+      <button class="btn" (click)="deleteSelected()">Smazat vybrané</button>
+      <button class="btn primary" (click)="generatePdf()">Stáhnout PDF</button>
+      <button class="btn" (click)="discardDraft()">Zahodit rozpracované</button>
+    </div>
+
+    <p class="status">{{ status }}</p>
+    <input #imageInput type="file" accept="image/png,image/jpeg" (change)="onImageSelected($event)" hidden>
+  </aside>
+
+  <main class="preview" #pdfWrapper></main>
+</div>
