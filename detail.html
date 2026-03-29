@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP Object Page (Edit)</title>
+  <link rel="stylesheet" href="erp-ui.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@latest/dist/datastar.js"></script>
+</head>
+<body>
+  <header class="sap-shellbar">
+    <div class="sap-shellbar__brand"><span class="sap-shell-dot"></span><span>ACME ERP · Business Partner</span></div>
+    <div class="sap-shellbar__actions">
+      <a class="sap-btn--transparent" href="list.html">Back to List</a>
+      <a class="sap-btn--transparent" href="preview.html">Preview</a>
+    </div>
+  </header>
+
+  <main class="sap-app">
+    <form class="sap-object" data-signals="{ newsletter: true }" data-on-submit__prevent="@post('/partners/100045')">
+      <div class="sap-object-head">
+        <div>
+          <h1 class="sap-page-title" style="margin:0">Business Partner 100045</h1>
+          <div class="sap-page-subtitle">SimpleForm-like horizontal alignment</div>
+        </div>
+        <div class="sap-kpi-row">
+          <div class="sap-kpi"><span>Status</span><strong>Active</strong></div>
+          <div class="sap-kpi"><span>Credit Limit</span><strong>100,000 USD</strong></div>
+          <div class="sap-kpi"><span>Risk Class</span><strong>A - Low</strong></div>
+        </div>
+      </div>
+
+      <div class="sap-sections">
+        <section class="sap-section">
+          <div class="sap-section__title">General Information</div>
+          <div class="sap-section__body sap-form-2col">
+            <div class="sap-form-row"><label>Partner Name</label><input class="sap-input" value="Acme Industrial Supplies" /></div>
+            <div class="sap-form-row"><label>Partner Type</label><select class="sap-select"><option>Organization</option><option>Person</option></select></div>
+            <div class="sap-form-row"><label>External ID</label><input class="sap-input" value="EXT-ACME-445" /></div>
+            <div class="sap-form-row"><label>Tax Number</label><input class="sap-input" value="US-93-1002222" /></div>
+            <div class="sap-form-row"><label>Language</label><select class="sap-select"><option>English</option><option>Czech</option></select></div>
+            <div class="sap-form-row"><label>Industry</label><select class="sap-select"><option>Manufacturing</option><option>Retail</option></select></div>
+          </div>
+        </section>
+
+        <section class="sap-section">
+          <div class="sap-section__title">Address & Communication</div>
+          <div class="sap-section__body sap-form-2col">
+            <div class="sap-form-row"><label>Street</label><input class="sap-input" value="100 Industrial Ave" /></div>
+            <div class="sap-form-row"><label>House Number</label><input class="sap-input" value="42B" /></div>
+            <div class="sap-form-row"><label>Postal Code</label><input class="sap-input" value="60601" /></div>
+            <div class="sap-form-row"><label>City</label><input class="sap-input" value="Chicago" /></div>
+            <div class="sap-form-row"><label>Country</label><select class="sap-select"><option>United States</option><option>Czech Republic</option></select></div>
+            <div class="sap-form-row"><label>Email</label><input class="sap-input" type="email" value="procurement@acme.com" /></div>
+            <div class="sap-form-row"><label>Phone</label><input class="sap-input" value="+1 312 555 0100" /></div>
+            <div class="sap-form-row"><label>Website</label><input class="sap-input" value="https://acme.example" /></div>
+          </div>
+        </section>
+
+        <section class="sap-section">
+          <div class="sap-section__title">Sales & Finance</div>
+          <div class="sap-section__body sap-form-2col">
+            <div class="sap-form-row"><label>Sales Organization</label><select class="sap-select"><option>US10</option><option>EU10</option></select></div>
+            <div class="sap-form-row"><label>Distribution Channel</label><select class="sap-select"><option>Direct</option><option>Online</option></select></div>
+            <div class="sap-form-row"><label>Division</label><select class="sap-select"><option>Industrial</option><option>Consumer</option></select></div>
+            <div class="sap-form-row"><label>Currency</label><select class="sap-select"><option>USD</option><option>EUR</option></select></div>
+            <div class="sap-form-row"><label>Payment Terms</label><select class="sap-select"><option>Net 30</option><option>Net 45</option></select></div>
+            <div class="sap-form-row"><label>Incoterms</label><select class="sap-select"><option>FCA</option><option>DAP</option></select></div>
+            <div class="sap-form-row"><label>Delivery Priority</label><select class="sap-select"><option>Normal</option><option>High</option></select></div>
+            <div class="sap-form-row"><label>Account Group</label><select class="sap-select"><option>Z001 Domestic</option><option>Z002 International</option></select></div>
+          </div>
+        </section>
+
+        <section class="sap-section">
+          <div class="sap-section__title">Notes & Preferences</div>
+          <div class="sap-section__body sap-form-1col">
+            <div class="sap-form-row"><label>Internal Notes</label><textarea class="sap-textarea">Customer expects ASN for all shipments. Requires PDF invoices and monthly statement.</textarea></div>
+            <div class="sap-form-row"><label>Newsletter</label><div class="sap-checkline"><div class="sap-switch on" data-on-click="$newsletter = !$newsletter; $el.classList.toggle('on')"></div><span>Subscribed</span></div></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="sap-footerbar">
+        <button type="button" class="sap-btn">Back</button>
+        <button type="button" class="sap-btn">Check</button>
+        <button type="submit" class="sap-btn--primary">Save</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

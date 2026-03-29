@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP List Report</title>
+  <link rel="stylesheet" href="erp-ui.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@latest/dist/datastar.js"></script>
+</head>
+<body>
+  <header class="sap-shellbar">
+    <div class="sap-shellbar__brand">
+      <span class="sap-shell-dot"></span>
+      <span>ACME ERP · Sales</span>
+    </div>
+    <div class="sap-shellbar__actions">
+      <button class="sap-btn--transparent">App Finder</button>
+      <button class="sap-btn--transparent">Me</button>
+    </div>
+  </header>
+
+  <main class="sap-app">
+    <section class="sap-page-header">
+      <h1 class="sap-page-title">Manage Sales Orders</h1>
+      <div class="sap-page-subtitle">List Report pattern (OpenUI5/Fiori-inspired)</div>
+    </section>
+
+    <form class="sap-toolbar" data-signals="{ sortBy: 'orderNo', order: 'asc' }" data-on-submit__prevent="@get('/orders/fragment')">
+      <div class="sap-filterbar">
+        <div class="sap-field">
+          <label>Search</label>
+          <input class="sap-input" type="search" placeholder="Order, customer, material..." data-bind="query" />
+        </div>
+        <div class="sap-field">
+          <label>Overall Status</label>
+          <select class="sap-select" data-bind="status">
+            <option value="">All</option><option>Open</option><option>In Process</option><option>Blocked</option><option>Completed</option>
+          </select>
+        </div>
+        <div class="sap-field">
+          <label>Sales Org</label>
+          <select class="sap-select" data-bind="salesOrg">
+            <option value="">Any</option><option>US10</option><option>US20</option><option>EU10</option>
+          </select>
+        </div>
+        <div class="sap-field">
+          <label>Created On</label>
+          <input class="sap-input" type="date" data-bind="createdOn" />
+        </div>
+        <div class="sap-field">
+          <label>Net Value &gt;=</label>
+          <input class="sap-input" type="number" placeholder="10000" data-bind="netMin" />
+        </div>
+        <div class="sap-field">
+          <label>&nbsp;</label>
+          <button class="sap-btn--primary" type="submit">Go</button>
+        </div>
+      </div>
+      <span class="sap-spacer"></span>
+      <button class="sap-btn" type="button">Adapt Filters</button>
+      <button class="sap-btn" type="button">Export</button>
+      <button class="sap-btn--primary" type="button">Create</button>
+    </form>
+
+    <section class="sap-card">
+      <div class="sap-card__head">
+        <strong>Sales Orders (44)</strong>
+        <div>
+          <button class="sap-btn" type="button">Group</button>
+          <button class="sap-btn" type="button">Settings</button>
+        </div>
+      </div>
+      <div class="sap-table-wrap">
+        <table class="sap-table">
+          <thead>
+            <tr>
+              <th data-on-click="$sortBy='orderNo';$order=$order==='asc'?'desc':'asc'">Sales Order ↕</th>
+              <th data-on-click="$sortBy='soldTo';$order=$order==='asc'?'desc':'asc'">Sold-To Party ↕</th>
+              <th>Created On</th>
+              <th>Sales Org</th>
+              <th>Overall Status</th>
+              <th data-on-click="$sortBy='netValue';$order=$order==='asc'?'desc':'asc'">Net Value ↕</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a class="sap-link" href="detail.html">50001234</a> · <a class="sap-link" href="preview.html">Preview</a></td>
+              <td>Northwind LLC</td>
+              <td>2026-03-02</td>
+              <td>US10</td>
+              <td><span class="sap-status sap-status--warning">In Process</span></td>
+              <td>45,000 USD</td>
+            </tr>
+            <tr>
+              <td><a class="sap-link" href="detail.html">50001235</a> · <a class="sap-link" href="preview.html">Preview</a></td>
+              <td>Blue Yonder Inc</td>
+              <td>2026-03-03</td>
+              <td>US20</td>
+              <td><span class="sap-status sap-status--success">Completed</span></td>
+              <td>12,400 USD</td>
+            </tr>
+            <tr>
+              <td><a class="sap-link" href="detail.html">50001236</a> · <a class="sap-link" href="preview.html">Preview</a></td>
+              <td>Contoso Retail</td>
+              <td>2026-03-04</td>
+              <td>EU10</td>
+              <td><span class="sap-status sap-status--error">Blocked</span></td>
+              <td>89,100 USD</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
