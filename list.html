@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP Components - List Page</title>
+  <link rel="stylesheet" href="erp-ui.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@latest/dist/datastar.js"></script>
+</head>
+<body>
+  <header class="top-shell">
+    <div>
+      <div class="brand">Acme ERP / Sales Orders</div>
+      <div class="subtitle">Low-code static component demo (Datastar-ready)</div>
+    </div>
+    <div class="actions">
+      <button class="btn ghost">Share Variant</button>
+      <button class="btn primary">Create Order</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card" data-signals="{ sortBy: 'orderNo', order:'asc' }">
+      <div class="section-header">
+        <h2 style="margin:0">Order List</h2>
+        <div class="actions">
+          <button class="btn">Export</button>
+          <button class="btn">Personalize</button>
+        </div>
+      </div>
+
+      <form class="filters" data-on-submit__prevent="@get('/orders/fragment')">
+        <div class="field">
+          <label>Search</label>
+          <input type="search" placeholder="Order, customer, material..." data-bind="query" />
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select data-bind="status">
+            <option value="">All</option>
+            <option>Open</option>
+            <option>In Fulfillment</option>
+            <option>Blocked</option>
+            <option>Completed</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Plant</label>
+          <select data-bind="plant">
+            <option value="">All Plants</option>
+            <option>US01</option>
+            <option>US02</option>
+            <option>EU01</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Net Value from</label>
+          <input type="number" placeholder="e.g. 10000" data-bind="netMin" />
+        </div>
+        <div class="field">
+          <label>Created between</label>
+          <input type="date" data-bind="createdFrom" />
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn primary" type="submit">Apply Filters</button>
+        </div>
+      </form>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-on-click="$sortBy='orderNo'; $order=$order==='asc'?'desc':'asc'">Order # ↕</th>
+              <th data-on-click="$sortBy='customer'; $order=$order==='asc'?'desc':'asc'">Customer ↕</th>
+              <th>Document Date</th>
+              <th>Plant</th>
+              <th>Status</th>
+              <th data-on-click="$sortBy='amount'; $order=$order==='asc'?'desc':'asc'">Net Value ↕</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr>
+              <td>50001234</td><td>Northwind LLC</td><td>2026-03-02</td><td>US01</td><td><span class="badge warning">In Fulfillment</span></td><td>45,000 USD</td>
+            </tr>
+            <tr>
+              <td>50001235</td><td>Blue Yonder Inc</td><td>2026-03-03</td><td>US02</td><td><span class="badge success">Completed</span></td><td>12,400 USD</td>
+            </tr>
+            <tr>
+              <td>50001236</td><td>Contoso Retail</td><td>2026-03-04</td><td>EU01</td><td><span class="badge danger">Blocked</span></td><td>89,100 USD</td>
+            </tr>
+            <tr>
+              <td>50001237</td><td>Fabrikam Parts</td><td>2026-03-05</td><td>US01</td><td><span class="badge warning">Open</span></td><td>27,930 USD</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

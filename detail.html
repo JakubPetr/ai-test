@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP Components - Detail Page</title>
+  <link rel="stylesheet" href="erp-ui.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@latest/dist/datastar.js"></script>
+</head>
+<body>
+  <header class="top-shell">
+    <div>
+      <div class="brand">Acme ERP / Business Partner Detail</div>
+      <div class="subtitle">Large form for low-code + Spring endpoint binding</div>
+    </div>
+    <div class="actions">
+      <button class="btn ghost">Back to List</button>
+      <button class="btn primary">Save</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <form class="card" data-signals="{ newsletter:true }" data-on-submit__prevent="@post('/partners/100045')">
+      <div class="section-header">
+        <h2 style="margin:0">Business Partner 100045</h2>
+        <div class="badge success">Active</div>
+      </div>
+
+      <div class="grid-2">
+        <section class="segment">
+          <h3>General Information</h3>
+          <div class="grid-2">
+            <div class="field"><label>Partner Name</label><input value="Acme Industrial Supplies" /></div>
+            <div class="field"><label>Partner Type</label><select><option>Organization</option><option>Person</option></select></div>
+            <div class="field"><label>External ID</label><input value="EXT-ACME-445" /></div>
+            <div class="field"><label>Tax Number</label><input value="US-93-1002222" /></div>
+            <div class="field"><label>Language</label><select><option>English</option><option>Czech</option><option>German</option></select></div>
+            <div class="field"><label>Industry</label><select><option>Manufacturing</option><option>Retail</option><option>Services</option></select></div>
+          </div>
+        </section>
+
+        <section class="segment">
+          <h3>Contact & Communication</h3>
+          <div class="grid-2">
+            <div class="field"><label>Main Contact</label><input value="Sarah Connor" /></div>
+            <div class="field"><label>Department</label><input value="Procurement" /></div>
+            <div class="field"><label>Email</label><input type="email" value="procurement@acme.com" /></div>
+            <div class="field"><label>Phone</label><input value="+1 312 555 0100" /></div>
+            <div class="field"><label>Website</label><input value="https://acme.example" /></div>
+            <div class="field"><label>Preferred Channel</label><select><option>Email</option><option>Phone</option><option>Portal</option></select></div>
+          </div>
+        </section>
+
+        <section class="segment">
+          <h3>Address</h3>
+          <div class="grid-2">
+            <div class="field"><label>Street</label><input value="100 Industrial Ave" /></div>
+            <div class="field"><label>House Number</label><input value="42B" /></div>
+            <div class="field"><label>City</label><input value="Chicago" /></div>
+            <div class="field"><label>Postal Code</label><input value="60601" /></div>
+            <div class="field"><label>State</label><input value="Illinois" /></div>
+            <div class="field"><label>Country</label><select><option>United States</option><option>Czech Republic</option></select></div>
+          </div>
+        </section>
+
+        <section class="segment">
+          <h3>Sales Area Data</h3>
+          <div class="grid-3">
+            <div class="field"><label>Sales Org</label><select><option>US10</option><option>EU10</option></select></div>
+            <div class="field"><label>Distribution Channel</label><select><option>Online</option><option>Direct</option></select></div>
+            <div class="field"><label>Division</label><select><option>Industrial</option><option>Consumer</option></select></div>
+            <div class="field"><label>Currency</label><select><option>USD</option><option>EUR</option></select></div>
+            <div class="field"><label>Payment Terms</label><select><option>Net 30</option><option>Net 45</option><option>Due on receipt</option></select></div>
+            <div class="field"><label>Incoterms</label><select><option>FCA</option><option>EXW</option><option>DAP</option></select></div>
+          </div>
+        </section>
+
+        <section class="segment" style="grid-column: 1 / -1;">
+          <h3>Notes, Flags & Preferences</h3>
+          <div class="grid-4">
+            <div class="field"><label>Risk Class</label><select><option>A - Low</option><option>B - Medium</option><option>C - High</option></select></div>
+            <div class="field"><label>Credit Limit</label><input type="number" value="100000" /></div>
+            <div class="field"><label>Delivery Priority</label><select><option>Normal</option><option>High</option><option>Critical</option></select></div>
+            <div class="field"><label>Account Group</label><select><option>Z001 Domestic</option><option>Z002 International</option></select></div>
+          </div>
+          <div class="field" style="margin-top:.8rem;">
+            <label>Internal Notes</label>
+            <textarea rows="5">Customer expects ASN for all shipments. Requires PDF invoices and monthly statement.</textarea>
+          </div>
+          <div class="inline" style="margin-top:.8rem;">
+            <div class="switch on" data-on-click="$newsletter = !$newsletter; $el.classList.toggle('on')"></div>
+            <label>Subscribed to Product Newsletter</label>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer-actions">
+        <button type="button" class="btn">Simulate</button>
+        <button type="button" class="btn">Check Data</button>
+        <button type="submit" class="btn primary">Save Partner</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
