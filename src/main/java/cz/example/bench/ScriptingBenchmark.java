@@ -9,6 +9,14 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.h2.jdbcx.JdbcDataSource;
+import dev.cel.common.CelAbstractSyntaxTree;
+import dev.cel.common.CelValidationException;
+import dev.cel.common.types.SimpleType;
+import dev.cel.compiler.CelCompiler;
+import dev.cel.compiler.CelCompilerFactory;
+import dev.cel.runtime.CelEvaluationException;
+import dev.cel.runtime.CelRuntime;
+import dev.cel.runtime.CelRuntimeFactory;
 
 import javax.script.Bindings;
 import javax.script.Compilable;
@@ -61,7 +69,8 @@ public class ScriptingBenchmark {
                 new GraalEspressoEngine(),
                 new GroovyScriptEngineBench(),
                 new JaninoBench(),
-                new JexlBench()
+                new JexlBench(),
+                new CelBench()
         );
 
         List<ResultRow> rows = new ArrayList<>();
@@ -535,6 +544,84 @@ public class ScriptingBenchmark {
             } catch (Exception ex) {
                 return ResultRow.skipped("Apache JEXL", ex);
             }
+        }
+    }
+
+
+    static class CelBench implements BenchEngine {
+        @Override
+        public ResultRow run(int iterations, JdbcDataSource ds, byte[] zipPayload) {
+            try {
+                CelCompiler uc1Compiler = CelCompilerFactory.standardCelCompilerBuilder()
+                        .addVar("age", SimpleType.INT)
+                        .build();
+                CelCompiler uc2Compiler = CelCompilerFactory.standardCelCompilerBuilder()
+                        .addVar("net", SimpleType.DOUBLE)
+                        .addVar("vatRate", SimpleType.DOUBLE)
+                        .addVar("customerId", SimpleType.STRING)
+                        .build();
+                CelCompiler uc3Compiler = CelCompilerFactory.standardCelCompilerBuilder()
+                        .addVar("invoiceCount", SimpleType.INT)
+                        .addVar("xlsxCount", SimpleType.INT)
+                        .build();
+
+                String uc1Expr = "age >= 18 && age <= 65 && age % 2 == 0";
+                String uc2Expr = "(net * (1.0 + vatRate)) + ((net * (1.0 + vatRate)) > 1500.0 ? 14.5 : 5.0) - (customerId.startsWith('A-') ? (net * (1.0 + vatRate)) * 0.03 : 0.0)";
+                String uc3Expr = "invoiceCount + xlsxCount + (xlsxCount > 1 ? 1 : 0)";
+
+                CelRuntime runtime = CelRuntimeFactory.standardCelRuntimeBuilder().build();
+                CelRuntime.Program uc1Program = runtime.createProgram(compile(uc1Compiler, uc1Expr));
+                CelRuntime.Program uc2Program = runtime.createProgram(compile(uc2Compiler, uc2Expr));
+                CelRuntime.Program uc3Program = runtime.createProgram(compile(uc3Compiler, uc3Expr));
+
+                return executeIterations("CEL", iterations,
+                        () -> (Boolean) uc1Program.eval(Map.of("age", 42L)),
+                        () -> ((Number) uc2Program.eval(Map.of(
+                                "net", 1250.0,
+                                "vatRate", 0.21,
+                                "customerId", "A-123"
+                        ))).doubleValue(),
+                        () -> {
+                            Map<String, Object> longInputs = prepareCelLongInputs(ds, zipPayload);
+                            return ((Number) uc3Program.eval(longInputs)).intValue();
+                        });
+            } catch (Exception ex) {
+                return ResultRow.skipped("CEL", ex);
+            }
+        }
+
+        private Map<String, Object> prepareCelLongInputs(JdbcDataSource ds, byte[] zipPayload) throws Exception {
+            int invoiceCount = 0;
+            try (Connection c = ds.getConnection(); Statement s = c.createStatement(); ResultSet rs = s.executeQuery("select count(*) from invoice")) {
+                if (rs.next()) {
+                    invoiceCount = rs.getInt(1);
+                }
+            }
+
+            List<String> names = new ArrayList<>();
+            int xlsxCount = 0;
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zipPayload))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    names.add(entry.getName());
+                    if (entry.getName().toLowerCase(Locale.ROOT).endsWith(".xlsx")) {
+                        xlsxCount++;
+                    }
+                }
+            }
+
+            try (Connection c = ds.getConnection(); Statement s = c.createStatement()) {
+                s.execute("insert into payment(invoice_count, xlsx_count) values (" + invoiceCount + ", " + xlsxCount + ")");
+            }
+
+            Map<String, Object> vars = new LinkedHashMap<>();
+            vars.put("invoiceCount", (long) invoiceCount);
+            vars.put("xlsxCount", (long) xlsxCount);
+            return vars;
+        }
+
+        private CelAbstractSyntaxTree compile(CelCompiler compiler, String expression) throws CelValidationException {
+            return compiler.compile(expression).getAst();
         }
     }
 

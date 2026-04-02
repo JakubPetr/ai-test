@@ -12,6 +12,7 @@ Projekt obsahuje jednoduchý benchmark pro 3 use case, každý spuštěný **100
 - Groovy přes JSR-223 ScriptEngine
 - Janino
 - Apache JEXL
+- CEL (Common Expression Language)
 
 ## Jak spustit
 ```bash
