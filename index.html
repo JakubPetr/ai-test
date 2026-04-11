@@ -1,421 +1,612 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en" data-theme="light" data-variant="a">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Výhledy Václavice | Prodej stavebních pozemků</title>
+  <title>Compact ERP UI Demo</title>
+
+  <!-- Variant B: Fundamental Styles -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/fundamental-styles@0.41.0/dist/fundamental-styles.css"
+  />
+  <!-- Variant C/D: Bootstrap -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
   />
+
   <style>
     :root {
-      --forest: #3f5a4a;
-      --olive: #6f8f59;
-      --meadow: #a7ba7b;
-      --mist: #f5f6f3;
-      --ink: #223028;
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --surface-2: #f0f3f8;
+      --text: #17212e;
+      --muted: #607086;
+      --border: #d9e1ec;
+      --accent: #0a6ed1;
+      --accent-2: #0854a0;
+      --ok: #1d8554;
+      --warn: #b65f00;
+      --danger: #bb0000;
+      --shadow: 0 1px 2px rgba(0,0,0,.08);
+      --radius: 8px;
+      --fs: 13px;
     }
 
+    html[data-theme="dark"] {
+      --bg: #0f141b;
+      --surface: #161d27;
+      --surface-2: #1e2835;
+      --text: #e4ebf5;
+      --muted: #9bb0c7;
+      --border: #2d3b4d;
+      --accent: #4da3ff;
+      --accent-2: #7ab8ff;
+      --shadow: 0 1px 2px rgba(0,0,0,.4);
+    }
+
+    * { box-sizing: border-box; }
     body {
-      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-      color: var(--ink);
-      background: #fff;
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      font-size: var(--fs);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.3;
     }
 
-    .navbar {
-      backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.9);
+    .app-shell {
+      display: grid;
+      grid-template-rows: 48px 1fr;
+      min-height: 100vh;
     }
 
-    .btn-brand {
-      background: var(--forest);
-      color: #fff;
-      border: none;
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 5;
     }
 
-    .btn-brand:hover {
-      background: #344b3d;
-      color: #fff;
+    .brand {
+      font-weight: 700;
+      letter-spacing: .2px;
+      margin-right: auto;
     }
 
-    .hero {
-      background: linear-gradient(135deg, var(--mist), #fff 60%);
+    .container-grid {
+      display: grid;
+      grid-template-columns: minmax(480px, 58%) minmax(420px, 42%);
+      gap: 10px;
+      padding: 10px;
+      min-height: calc(100vh - 48px);
     }
 
-    .hero-card {
-      background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 24px 60px rgba(34, 48, 40, 0.12);
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      min-height: 0;
     }
 
-    .badge-brand {
-      background: rgba(63, 90, 74, 0.1);
-      color: var(--forest);
-      letter-spacing: 0.08em;
-    }
-
-    .section-title span {
-      color: var(--forest);
-    }
-
-    .feature-card {
-      border: 1px solid rgba(63, 90, 74, 0.15);
-      border-radius: 20px;
-      padding: 24px;
-      height: 100%;
-      background: #fff;
-    }
-
-    .timeline {
-      border-left: 2px solid rgba(63, 90, 74, 0.2);
-      padding-left: 24px;
-    }
-
-    .timeline-item {
-      margin-bottom: 24px;
-    }
-
-    .timeline-item::before {
-      content: "";
-      width: 12px;
-      height: 12px;
-      background: var(--forest);
-      display: inline-block;
-      border-radius: 50%;
-      margin-left: -30px;
-      margin-right: 16px;
-    }
-
-    .cta {
-      background: linear-gradient(135deg, var(--forest), #2c3f34);
-      color: #fff;
-      border-radius: 28px;
-    }
-
-    .price-tag {
-      background: var(--forest);
-      color: #fff;
-      border-radius: 14px;
-      padding: 12px 18px;
-      display: inline-block;
+    .panel-head {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
       font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .map-card {
-      background: var(--mist);
-      border-radius: 20px;
-      padding: 24px;
+    .toolbar, .agg-row {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 6px;
+      align-items: end;
     }
 
-    .logo-text {
-      font-family: "Georgia", "Times New Roman", serif;
-      letter-spacing: 0.2em;
-      font-weight: 600;
-      color: var(--forest);
+    .agg-row {
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface-2);
     }
 
-    .footer {
-      background: var(--mist);
+    .field {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    input, select, textarea, button {
+      font: inherit;
+      color: inherit;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 7px;
+      min-height: 30px;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--surface-2);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-ghost { background: transparent; }
+
+    .table-wrap {
+      overflow: auto;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      padding: 8px;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 7px 8px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr:hover { background: var(--surface-2); }
+    tbody tr.active { outline: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+    .status { padding: 1px 6px; border-radius: 12px; font-size: 11px; }
+    .status-open { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+    .status-closed { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+
+    .detail-body {
+      padding: 10px;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      margin: 0;
+    }
+
+    legend { padding: 0 4px; font-size: 11px; color: var(--muted); text-transform: uppercase; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+    .full { grid-column: 1 / -1; }
+
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
+    .tab {
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: none;
+      padding: 6px 8px;
+      min-height: auto;
+    }
+    .tab.active { border-bottom-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .tab-panel { display: none; padding-top: 8px; }
+    .tab-panel.active { display: block; }
+
+    .input-grid {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .input-grid table input { width: 100%; border: 0; border-radius: 0; min-height: 28px; }
+
+    .readonly [data-editable] {
+      pointer-events: none;
+      background: var(--surface-2);
+      color: var(--muted);
+    }
+
+    .mode-pill {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .muted { color: var(--muted); }
+
+    /* Variant styles */
+    html[data-variant="a"] .topbar { border-top: 2px solid #0a6ed1; }
+    html[data-variant="a"] .panel-head { background: linear-gradient(#f9fbfe, transparent); }
+
+    html[data-variant="b"] .panel,
+    html[data-variant="b"] input,
+    html[data-variant="b"] select,
+    html[data-variant="b"] textarea,
+    html[data-variant="b"] button {
+      border-radius: 0;
+    }
+
+    html[data-variant="c"] body,
+    html[data-variant="d"] body { font-family: "Segoe UI", system-ui, sans-serif; }
+    html[data-variant="c"] .panel,
+    html[data-variant="d"] .panel { border-radius: .375rem; }
+
+    html[data-variant="d"] .floating {
+      position: relative;
+    }
+    html[data-variant="d"] .floating label {
+      position: absolute;
+      left: 8px;
+      top: -7px;
+      font-size: 10px;
+      background: var(--surface);
+      padding: 0 4px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    @media (max-width: 1100px) {
+      .container-grid { grid-template-columns: 1fr; min-height: auto; }
+      .panel { min-height: 420px; }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top py-3">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-3" href="#">
-        <span class="d-inline-flex align-items-center">
-          <svg width="54" height="54" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect width="120" height="120" fill="none" />
-            <path d="M18 60c12-8 24-12 36-12 12 0 22 3 34 9 10 5 22 7 32 7-8 4-20 7-30 8-12 1-22-2-34-6-10-3-18-3-26-1-10 2-20 6-30 13 3-7 9-14 18-18Z" fill="#6f8f59" />
-            <path d="M14 78c10-8 22-12 36-12 14 0 26 3 38 9 10 5 20 7 32 7-6 4-18 7-28 8-14 1-26-3-38-7-12-4-22-3-32 0-10 3-20 8-28 16 2-7 8-14 20-21Z" fill="#3f5a4a" />
-            <path d="M30 52l6-12 6 12h-4l4 8h-12l4-8h-4Z" fill="#3f5a4a" />
-            <path d="M46 42l8-16 8 16h-5l5 10h-16l5-10h-5Z" fill="#3f5a4a" />
-            <path d="M66 46l6-12 6 12h-4l4 8h-12l4-8h-4Z" fill="#3f5a4a" />
-            <path d="M82 40l7-14 7 14h-4l4 9h-14l4-9h-4Z" fill="#3f5a4a" />
-          </svg>
-        </span>
-        <div class="d-none d-sm-block">
-          <div class="logo-text">VÝHLEDY</div>
-          <small class="text-uppercase text-muted" style="letter-spacing: 0.3em;">Václavice</small>
-        </div>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto gap-lg-3">
-          <li class="nav-item"><a class="nav-link" href="#o-projektu">O projektu</a></li>
-          <li class="nav-item"><a class="nav-link" href="#pozemky">Pozemky</a></li>
-          <li class="nav-item"><a class="nav-link" href="#lokalita">Lokalita</a></li>
-          <li class="nav-item"><a class="nav-link" href="#infrastruktura">Infrastruktura</a></li>
-        </ul>
-        <a class="btn btn-brand ms-lg-4" href="#kontakt">Domluvit prohlídku</a>
-      </div>
-    </div>
-  </nav>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">ERP Compact UI · Orders</div>
+      <select id="variantSelect" title="Style variant">
+        <option value="a">A · SAP-inspired custom</option>
+        <option value="b">B · Fundamental styles flavor</option>
+        <option value="c">C · Bootstrap flavor</option>
+        <option value="d">D · Bootstrap floating labels</option>
+      </select>
+      <button id="themeToggle" class="btn-ghost">🌗 Theme</button>
+    </header>
 
-  <section class="hero py-5">
-    <div class="container py-lg-5">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <span class="badge badge-brand px-3 py-2">PRODEJ STAVEBNÍCH POZEMKŮ</span>
-          <h1 class="display-5 fw-semibold mt-3">Výhledy Václavice — místo, kde se venkovský klid potkává s městem.</h1>
-          <p class="lead text-muted mt-3">
-            Projekt nabízí 7 zastavitelných pozemků v klidné lokalitě Václavice u Hrádku nad Nisou. Revitalizovaný zemědělský areál na okraji obce garantuje soukromí a jistotu bez další nové zástavby.
-          </p>
-          <div class="d-flex flex-wrap gap-3 mt-4">
-            <div class="price-tag">2 175 000 Kč · 870 m²</div>
-            <div class="align-self-center text-muted">2 500 Kč/m²</div>
-          </div>
-          <div class="d-flex gap-3 mt-4">
-            <a class="btn btn-brand btn-lg" href="#pozemky">Vybrat pozemek</a>
-            <a class="btn btn-outline-secondary btn-lg" href="#lokalita">Poznat lokalitu</a>
-          </div>
+    <main class="container-grid">
+      <section class="panel" aria-label="Order list panel">
+        <div class="panel-head">
+          <span>Order List</span>
+          <small id="rowCount" class="muted">0 rows</small>
         </div>
-        <div class="col-lg-6">
-          <div class="hero-card p-4 p-lg-5">
-            <h2 class="h4 fw-semibold">Rychlé info</h2>
-            <div class="row mt-4 g-3">
-              <div class="col-6">
-                <div class="text-muted text-uppercase small">Počet pozemků</div>
-                <div class="h5">7</div>
-              </div>
-              <div class="col-6">
-                <div class="text-muted text-uppercase small">Velikosti</div>
-                <div class="h5">460 m² · 870 m²</div>
-              </div>
-              <div class="col-6">
-                <div class="text-muted text-uppercase small">Dojezd</div>
-                <div class="h5">Liberec 15 min</div>
-              </div>
-              <div class="col-6">
-                <div class="text-muted text-uppercase small">Příroda</div>
-                <div class="h5">Ještěd · Lužické hory</div>
-              </div>
-            </div>
-            <hr class="my-4" />
-            <div class="d-flex align-items-center gap-3">
-              <div class="rounded-circle p-3" style="background: rgba(167,186,123,0.2);">
-                <strong class="text-success">✓</strong>
-              </div>
-              <div>
-                <div class="fw-semibold">Územní studie hotová</div>
-                <small class="text-muted">Jednodušší povolovací proces rodinných domů.</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="o-projektu" class="py-5">
-    <div class="container">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <h2 class="section-title fw-semibold">Projekt <span>Výhledy Václavice</span></h2>
-          <p class="text-muted">
-            Vznikl citlivou revitalizací zemědělského areálu na okraji obce. Nabízí tři menší pozemky (cca 460 m²) a čtyři větší (cca 870 m²) určené k výstavbě rodinných domů venkovského charakteru.
-          </p>
-          <p class="text-muted">
-            Územní plán města Hrádek nad Nisou zařazuje lokalitu mezi plochy pro bydlení. Vyhotovená územní studie je zapsána v evidenci územně plánovacích podkladů a určuje budoucí rozvoj lokality.
-          </p>
+        <div class="toolbar">
+          <div class="field">
+            <label for="fCustomer">Customer</label>
+            <input id="fCustomer" placeholder="contains..." />
+          </div>
+          <div class="field">
+            <label for="fStatus">Status</label>
+            <select id="fStatus">
+              <option value="">All</option>
+              <option>Open</option>
+              <option>Closed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fMin">Min amount</label>
+            <input id="fMin" type="number" placeholder="0" />
+          </div>
+          <div class="field">
+            <label for="fSort">Sort by</label>
+            <select id="fSort">
+              <option value="date_desc">Date ↓</option>
+              <option value="date_asc">Date ↑</option>
+              <option value="amount_desc">Amount ↓</option>
+              <option value="amount_asc">Amount ↑</option>
+            </select>
+          </div>
         </div>
-        <div class="col-lg-6">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="feature-card">
-                <h3 class="h6 text-uppercase">Klidný okraj obce</h3>
-                <p class="text-muted">Bez plánované další zástavby v bezprostředním sousedství.</p>
+
+        <div class="table-wrap" id="listScroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th class="text-end">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="listBody"></tbody>
+          </table>
+        </div>
+
+        <div class="agg-row">
+          <div><strong id="aggCount">0</strong> orders</div>
+          <div><strong id="aggOpen">0</strong> open</div>
+          <div><strong id="aggClosed">0</strong> closed</div>
+          <div>Total: <strong id="aggAmount">0.00</strong></div>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="Order detail panel">
+        <div class="panel-head">
+          <span id="detailTitle">Order Detail</span>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span id="modePill" class="mode-pill">Preview</span>
+            <button id="editToggle" class="btn-primary">Edit</button>
+          </div>
+        </div>
+
+        <div class="detail-body readonly" id="detailForm">
+          <fieldset>
+            <legend>Main</legend>
+            <div class="form-grid">
+              <div class="field floating">
+                <label for="orderNo">Order number</label>
+                <input data-editable id="orderNo" type="text" />
+              </div>
+              <div class="field floating">
+                <label for="customer">Customer (lookup)</label>
+                <input data-editable id="customer" list="customerList" />
+                <datalist id="customerList">
+                  <option>ACME Corp</option>
+                  <option>Northwind</option>
+                  <option>Globex</option>
+                </datalist>
+              </div>
+              <div class="field floating">
+                <label for="status">Status</label>
+                <select data-editable id="status">
+                  <option>Open</option>
+                  <option>Closed</option>
+                </select>
+              </div>
+              <div class="field floating">
+                <label for="amount">Amount</label>
+                <input data-editable id="amount" type="number" step="0.01" />
+              </div>
+              <div class="field floating">
+                <label for="orderDate">Date</label>
+                <input data-editable id="orderDate" type="date" />
+              </div>
+              <div class="field floating">
+                <label for="deliveryTime">Time</label>
+                <input data-editable id="deliveryTime" type="time" />
+              </div>
+              <div class="field floating">
+                <label for="appointment">DateTime</label>
+                <input data-editable id="appointment" type="datetime-local" />
+              </div>
+              <div class="field floating full">
+                <label for="note">Textarea note</label>
+                <textarea data-editable id="note" rows="2"></textarea>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="feature-card">
-                <h3 class="h6 text-uppercase">Venkovský charakter</h3>
-                <p class="text-muted">Koncept rodinných domů respektuje krajinu a místní charakter.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Tabs</legend>
+            <div class="tabs">
+              <button class="tab active" data-tab="items">Items</button>
+              <button class="tab" data-tab="shipping">Shipping</button>
+            </div>
+            <div id="tab-items" class="tab-panel active">
+              <div class="input-grid">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width:44%">Product</th>
+                      <th style="width:18%">Qty</th>
+                      <th style="width:18%">Price</th>
+                      <th style="width:20%">Line Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="itemsBody"></tbody>
+                </table>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="feature-card">
-                <h3 class="h6 text-uppercase">Příroda na dosah</h3>
-                <p class="text-muted">Výhledy na Ještědský hřeben a Lužické hory.</p>
+            <div id="tab-shipping" class="tab-panel">
+              <div class="form-grid">
+                <div class="field"><label>Warehouse (select)</label><select data-editable><option>WH-01</option><option>WH-02</option></select></div>
+                <div class="field"><label>Carrier</label><input data-editable type="text" value="DHL" /></div>
+                <div class="field full"><label>Address</label><textarea data-editable rows="2">Main street 1</textarea></div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="feature-card">
-                <h3 class="h6 text-uppercase">Komunita 632 obyvatel</h3>
-                <p class="text-muted">Malebná obec v údolí Václavického potoka.</p>
-              </div>
-            </div>
-          </div>
+          </fieldset>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    </main>
+  </div>
 
-  <section id="pozemky" class="py-5 bg-light">
-    <div class="container">
-      <div class="row align-items-center mb-4">
-        <div class="col-lg-8">
-          <h2 class="section-title fw-semibold">Nabídka <span>pozemků</span></h2>
-          <p class="text-muted">Všechny pozemky mají samostatné přípojky vody, elektrické energie a optické sítě s možností vysokorychlostního internetu.</p>
-        </div>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6 col-lg-4">
-          <div class="feature-card">
-            <div class="d-flex justify-content-between align-items-center">
-              <h3 class="h5">Pozemek 870 m²</h3>
-              <span class="badge bg-success">2 175 000 Kč</span>
-            </div>
-            <p class="text-muted mt-2">Větší pozemek s přímým výhledem na okolní krajinu. Ideální pro rodinný dům s větší zahradou.</p>
-            <ul class="list-unstyled text-muted">
-              <li>✓ Cena 2 500 Kč/m²</li>
-              <li>✓ Napojení na vodu a elektřinu</li>
-              <li>✓ Připravená optická síť</li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="feature-card">
-            <div class="d-flex justify-content-between align-items-center">
-              <h3 class="h5">Pozemek 460 m²</h3>
-              <span class="badge bg-secondary">na dotaz</span>
-            </div>
-            <p class="text-muted mt-2">Kompaktní parcela vhodná pro útulný rodinný dům venkovského charakteru.</p>
-            <ul class="list-unstyled text-muted">
-              <li>✓ Územní studie pro lokalitu</li>
-              <li>✓ Snadný přístup z nové komunikace</li>
-              <li>✓ Dostupné MŠ, restaurace, sport</li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="feature-card">
-            <div class="d-flex justify-content-between align-items-center">
-              <h3 class="h5">Vnitřní infrastruktura</h3>
-              <span class="badge bg-success-subtle text-success">Nová</span>
-            </div>
-            <p class="text-muted mt-2">Součástí projektu je nová vnitřní příjezdová komunikace pro pohodlný příjezd k pozemkům.</p>
-            <ul class="list-unstyled text-muted">
-              <li>✓ Příjezdová cesta v lokalitě</li>
-              <li>✓ Samostatné přípojky</li>
-              <li>✓ Vlastní DČOV nebo jímka</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="lokalita" class="py-5">
-    <div class="container">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <h2 class="section-title fw-semibold">Lokalita, která <span>šetří čas</span></h2>
-          <p class="text-muted">Václavice leží v údolí Václavického potoka. Do Chrastavy dojedete za 5 minut, do Hrádku nad Nisou za 10 minut a do Liberce za 15 minut.</p>
-          <div class="timeline mt-4">
-            <div class="timeline-item">
-              <strong>Chrastava · 5 min</strong>
-              <div class="text-muted">Obchody, školy a další služby.</div>
-            </div>
-            <div class="timeline-item">
-              <strong>Hrádek nad Nisou · 10 min</strong>
-              <div class="text-muted">Vlakové a autobusové nádraží, pošta, větší obchody.</div>
-            </div>
-            <div class="timeline-item">
-              <strong>Liberec · 15 min</strong>
-              <div class="text-muted">Krajské město s kompletní občanskou vybaveností.</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="map-card">
-            <h3 class="h5">V okolí najdete</h3>
-            <ul class="list-unstyled mt-3 text-muted">
-              <li>• Mateřská škola (cca 2 km)</li>
-              <li>• Autobusové zastávky (nejbližší 520 m)</li>
-              <li>• Dvě restaurace, sportovní areál</li>
-              <li>• Malebný rybníček v sousedství (2 min chůze)</li>
-            </ul>
-            <hr />
-            <h4 class="h6 text-uppercase">Volný čas</h4>
-            <ul class="list-unstyled text-muted">
-              <li>• Výšlap na vrcholek Výhledy (cca 30 min)</li>
-              <li>• Hrad Grabštejn (3 km)</li>
-              <li>• Jezero Kristýna a Žitavské jezero</li>
-              <li>• Cyklostezky až do Německa a Polska</li>
-              <li>• Zámek Lemberk</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="infrastruktura" class="py-5 bg-light">
-    <div class="container">
-      <h2 class="section-title fw-semibold">Technická <span>infrastruktura</span></h2>
-      <div class="row g-3 mt-4">
-        <div class="col-md-4">
-          <div class="feature-card">
-            <h3 class="h6 text-uppercase">Přípojky na pozemku</h3>
-            <p class="text-muted">Samostatná vodovodní přípojka a elektrická energie ke každému pozemku.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-card">
-            <h3 class="h6 text-uppercase">Optická síť</h3>
-            <p class="text-muted">Připraveno pro vysokorychlostní internet.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-card">
-            <h3 class="h6 text-uppercase">DČOV nebo jímka</h3>
-            <p class="text-muted">Nutnost vybudování vlastní čistírny nebo jímky pro každý dům.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="kontakt" class="py-5">
-    <div class="container">
-      <div class="cta p-4 p-lg-5">
-        <div class="row align-items-center g-3">
-          <div class="col-lg-8">
-            <h2 class="fw-semibold">Domluvte si prohlídku nebo si vyžádejte detailní nabídku.</h2>
-            <p class="mb-0">Rádi vám představíme jednotlivé parcely i plánovanou infrastrukturu.</p>
-          </div>
-          <div class="col-lg-4 text-lg-end">
-            <a class="btn btn-light btn-lg" href="mailto:info@vyhledy-vaclavice.cz">Kontaktovat</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer py-4">
-    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-      <div>
-        <div class="logo-text">VÝHLEDY VÁCLAVICE</div>
-        <small class="text-muted">Prodej stavebních pozemků · Hrádek nad Nisou</small>
-      </div>
-      <div class="text-muted">© 2024 Výhledy Václavice</div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.querySelectorAll('a.nav-link').forEach((link) => {
-      link.addEventListener('click', () => {
-        const menu = document.querySelector('#navMenu');
-        if (menu.classList.contains('show')) {
-          bootstrap.Collapse.getOrCreateInstance(menu).hide();
-        }
+    const state = {
+      allRows: [],
+      filteredRows: [],
+      page: 0,
+      pageSize: 40,
+      selectedId: null,
+      editMode: false
+    };
+
+    const listBody = document.getElementById('listBody');
+    const listScroll = document.getElementById('listScroll');
+    const rowCount = document.getElementById('rowCount');
+
+    function generateRows(count = 500) {
+      const customers = ['ACME Corp', 'Northwind', 'Globex', 'Initech', 'Umbrella', 'Soylent', 'Hooli'];
+      const rows = [];
+      for (let i = 1; i <= count; i++) {
+        const amount = +(Math.random() * 1900 + 100).toFixed(2);
+        const day = ((i % 28) + 1).toString().padStart(2, '0');
+        rows.push({
+          id: i,
+          no: `SO-${String(i).padStart(5, '0')}`,
+          date: `2026-03-${day}`,
+          customer: customers[i % customers.length],
+          status: i % 3 === 0 ? 'Closed' : 'Open',
+          amount,
+          items: [
+            { product: 'Widget A', qty: 1 + (i % 4), price: 19.9 },
+            { product: 'Widget B', qty: 2 + (i % 3), price: 12.5 }
+          ],
+          note: 'Compact ERP demo order.'
+        });
+      }
+      return rows;
+    }
+
+    function applyFilters() {
+      const customer = document.getElementById('fCustomer').value.trim().toLowerCase();
+      const status = document.getElementById('fStatus').value;
+      const min = parseFloat(document.getElementById('fMin').value || '0');
+      const sort = document.getElementById('fSort').value;
+
+      state.filteredRows = state.allRows.filter(r =>
+        (!customer || r.customer.toLowerCase().includes(customer)) &&
+        (!status || r.status === status) &&
+        r.amount >= min
+      );
+
+      state.filteredRows.sort((a, b) => {
+        if (sort === 'date_desc') return b.date.localeCompare(a.date);
+        if (sort === 'date_asc') return a.date.localeCompare(b.date);
+        if (sort === 'amount_desc') return b.amount - a.amount;
+        return a.amount - b.amount;
       });
+
+      state.page = 0;
+      listBody.innerHTML = '';
+      renderNextPage();
+      updateAggregation();
+    }
+
+    function renderNextPage() {
+      const start = state.page * state.pageSize;
+      const next = state.filteredRows.slice(start, start + state.pageSize);
+      next.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = r.id;
+        if (r.id === state.selectedId) tr.classList.add('active');
+        tr.innerHTML = `
+          <td>${r.no}</td>
+          <td>${r.date}</td>
+          <td>${r.customer}</td>
+          <td><span class="status ${r.status === 'Open' ? 'status-open' : 'status-closed'}">${r.status}</span></td>
+          <td style="text-align:right">${r.amount.toFixed(2)}</td>
+        `;
+        tr.onclick = () => selectRow(r.id);
+        listBody.appendChild(tr);
+      });
+      state.page++;
+      rowCount.textContent = `${state.filteredRows.length} rows`;
+    }
+
+    function updateAggregation() {
+      const count = state.filteredRows.length;
+      const open = state.filteredRows.filter(r => r.status === 'Open').length;
+      const closed = count - open;
+      const total = state.filteredRows.reduce((s, r) => s + r.amount, 0);
+      document.getElementById('aggCount').textContent = count;
+      document.getElementById('aggOpen').textContent = open;
+      document.getElementById('aggClosed').textContent = closed;
+      document.getElementById('aggAmount').textContent = total.toFixed(2);
+    }
+
+    function selectRow(id) {
+      state.selectedId = id;
+      document.querySelectorAll('#listBody tr').forEach(tr => tr.classList.toggle('active', +tr.dataset.id === id));
+      const row = state.allRows.find(r => r.id === id);
+      if (!row) return;
+
+      document.getElementById('detailTitle').textContent = `Order Detail · ${row.no}`;
+      document.getElementById('orderNo').value = row.no;
+      document.getElementById('customer').value = row.customer;
+      document.getElementById('status').value = row.status;
+      document.getElementById('amount').value = row.amount;
+      document.getElementById('orderDate').value = row.date;
+      document.getElementById('deliveryTime').value = '10:30';
+      document.getElementById('appointment').value = `${row.date}T10:30`;
+      document.getElementById('note').value = row.note;
+
+      const itemsBody = document.getElementById('itemsBody');
+      itemsBody.innerHTML = '';
+      row.items.forEach(it => {
+        const tr = document.createElement('tr');
+        const lineTotal = (it.qty * it.price).toFixed(2);
+        tr.innerHTML = `
+          <td><input data-editable value="${it.product}"></td>
+          <td><input data-editable type="number" value="${it.qty}"></td>
+          <td><input data-editable type="number" step="0.01" value="${it.price}"></td>
+          <td style="text-align:right; padding-right:8px;">${lineTotal}</td>
+        `;
+        itemsBody.appendChild(tr);
+      });
+    }
+
+    function toggleEditMode() {
+      state.editMode = !state.editMode;
+      const form = document.getElementById('detailForm');
+      const btn = document.getElementById('editToggle');
+      const modePill = document.getElementById('modePill');
+      form.classList.toggle('readonly', !state.editMode);
+      btn.textContent = state.editMode ? 'Preview' : 'Edit';
+      modePill.textContent = state.editMode ? 'Edit' : 'Preview';
+    }
+
+    document.getElementById('themeToggle').onclick = () => {
+      const html = document.documentElement;
+      html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+    };
+
+    document.getElementById('variantSelect').onchange = (e) => {
+      document.documentElement.dataset.variant = e.target.value;
+    };
+
+    document.getElementById('editToggle').onclick = toggleEditMode;
+
+    ['fCustomer', 'fStatus', 'fMin', 'fSort'].forEach(id => {
+      document.getElementById(id).addEventListener('input', applyFilters);
+      document.getElementById(id).addEventListener('change', applyFilters);
     });
+
+    listScroll.addEventListener('scroll', () => {
+      const nearBottom = listScroll.scrollTop + listScroll.clientHeight >= listScroll.scrollHeight - 40;
+      if (nearBottom && state.page * state.pageSize < state.filteredRows.length) {
+        renderNextPage();
+      }
+    });
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      };
+    });
+
+    state.allRows = generateRows();
+    applyFilters();
+    selectRow(state.filteredRows[0]?.id || 1);
   </script>
 </body>
 </html>
