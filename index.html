@@ -1,39 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-variant="a">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Compact ERP UI Demo</title>
-
-  <!-- Variant B: Fundamental Styles -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/fundamental-styles@0.41.0/dist/fundamental-styles.css"
-  />
-  <!-- Variant C/D: Bootstrap -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-  />
-
+  <title>ERP Orders - List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <style>
     :root {
       --bg: #f5f7fa;
-      --surface: #ffffff;
+      --surface: #fff;
       --surface-2: #f0f3f8;
       --text: #17212e;
       --muted: #607086;
       --border: #d9e1ec;
       --accent: #0a6ed1;
-      --accent-2: #0854a0;
-      --ok: #1d8554;
-      --warn: #b65f00;
-      --danger: #bb0000;
-      --shadow: 0 1px 2px rgba(0,0,0,.08);
-      --radius: 8px;
-      --fs: 13px;
     }
-
     html[data-theme="dark"] {
       --bg: #0f141b;
       --surface: #161d27;
@@ -42,436 +23,81 @@
       --muted: #9bb0c7;
       --border: #2d3b4d;
       --accent: #4da3ff;
-      --accent-2: #7ab8ff;
-      --shadow: 0 1px 2px rgba(0,0,0,.4);
     }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-      font-size: var(--fs);
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.3;
-    }
-
-    .app-shell {
-      display: grid;
-      grid-template-rows: 48px 1fr;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 12px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    .brand {
-      font-weight: 700;
-      letter-spacing: .2px;
-      margin-right: auto;
-    }
-
-    .container-grid {
-      display: grid;
-      grid-template-columns: minmax(480px, 58%) minmax(420px, 42%);
-      gap: 10px;
-      padding: 10px;
-      min-height: calc(100vh - 48px);
-    }
-
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      min-height: 0;
-    }
-
-    .panel-head {
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border);
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .toolbar, .agg-row {
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 6px;
-      align-items: end;
-    }
-
-    .agg-row {
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      font-size: 12px;
-      color: var(--muted);
-      background: var(--surface-2);
-    }
-
-    .field {
-      display: grid;
-      gap: 3px;
-      min-width: 0;
-    }
-
-    label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-    input, select, textarea, button {
-      font: inherit;
-      color: inherit;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 5px 7px;
-      min-height: 30px;
-    }
-
-    button {
-      cursor: pointer;
-      background: var(--surface-2);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-
-    .btn-ghost { background: transparent; }
-
-    .table-wrap {
-      overflow: auto;
-      min-height: 0;
-      max-height: 100%;
-    }
-
-    table { width: 100%; border-collapse: collapse; }
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--surface);
-      z-index: 1;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-      padding: 8px;
-      white-space: nowrap;
-    }
-
-    tbody td {
-      padding: 7px 8px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
-    tbody tr:hover { background: var(--surface-2); }
-    tbody tr.active { outline: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
-
-    .status { padding: 1px 6px; border-radius: 12px; font-size: 11px; }
-    .status-open { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
-    .status-closed { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
-
-    .detail-body {
-      padding: 10px;
-      overflow: auto;
-      display: grid;
-      gap: 10px;
-    }
-
-    fieldset {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-      margin: 0;
-    }
-
-    legend { padding: 0 4px; font-size: 11px; color: var(--muted); text-transform: uppercase; }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
-    .full { grid-column: 1 / -1; }
-
-    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
-    .tab {
-      border: 0;
-      border-bottom: 2px solid transparent;
-      border-radius: 0;
-      background: none;
-      padding: 6px 8px;
-      min-height: auto;
-    }
-    .tab.active { border-bottom-color: var(--accent); color: var(--accent); font-weight: 600; }
-    .tab-panel { display: none; padding-top: 8px; }
-    .tab-panel.active { display: block; }
-
-    .input-grid {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .input-grid table input { width: 100%; border: 0; border-radius: 0; min-height: 28px; }
-
-    .readonly [data-editable] {
-      pointer-events: none;
-      background: var(--surface-2);
-      color: var(--muted);
-    }
-
-    .mode-pill {
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .muted { color: var(--muted); }
-
-    /* Variant styles */
-    html[data-variant="a"] .topbar { border-top: 2px solid #0a6ed1; }
-    html[data-variant="a"] .panel-head { background: linear-gradient(#f9fbfe, transparent); }
-
-    html[data-variant="b"] .panel,
-    html[data-variant="b"] input,
-    html[data-variant="b"] select,
-    html[data-variant="b"] textarea,
-    html[data-variant="b"] button {
-      border-radius: 0;
-    }
-
-    html[data-variant="c"] body,
-    html[data-variant="d"] body { font-family: "Segoe UI", system-ui, sans-serif; }
-    html[data-variant="c"] .panel,
-    html[data-variant="d"] .panel { border-radius: .375rem; }
-
-    html[data-variant="d"] .floating {
-      position: relative;
-    }
-    html[data-variant="d"] .floating label {
-      position: absolute;
-      left: 8px;
-      top: -7px;
-      font-size: 10px;
-      background: var(--surface);
-      padding: 0 4px;
-      text-transform: none;
-      letter-spacing: 0;
-    }
-
-    @media (max-width: 1100px) {
-      .container-grid { grid-template-columns: 1fr; min-height: auto; }
-      .panel { min-height: 420px; }
-    }
+    body { margin:0; font: 13px/1.3 "Inter", "Segoe UI", sans-serif; background: var(--bg); color:var(--text); }
+    .topbar { height:48px; display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--surface); border-bottom:1px solid var(--border); }
+    .brand { font-weight:700; margin-right:auto; }
+    .panel { margin:10px; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.08); display:grid; grid-template-rows:auto auto 1fr auto; min-height: calc(100vh - 68px); }
+    .panel-head,.toolbar,.agg-row { padding:8px 10px; border-bottom:1px solid var(--border); }
+    .panel-head { display:flex; justify-content:space-between; align-items:center; font-weight:600; }
+    .toolbar { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
+    .field{ display:grid; gap:3px; }
+    label { font-size:11px; color:var(--muted); text-transform:uppercase; }
+    input,select,button { min-height:30px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); padding:5px 7px; }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse: collapse; }
+    th,td { padding:7px 8px; border-bottom:1px solid var(--border); white-space:nowrap; }
+    th { position: sticky; top:0; background:var(--surface); text-align:left; }
+    tr:hover { background: var(--surface-2); }
+    .status { padding:1px 6px; border-radius:12px; font-size:11px; }
+    .open { background:#fff2df; color:#b65f00; }
+    .closed { background:#e5f5eb; color:#1d8554; }
+    .agg-row { display:grid; grid-template-columns: repeat(4,minmax(0,1fr)); color:var(--muted); background:var(--surface-2); }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">ERP Compact UI · Orders</div>
-      <select id="variantSelect" title="Style variant">
-        <option value="a">A · SAP-inspired custom</option>
-        <option value="b">B · Fundamental styles flavor</option>
-        <option value="c">C · Bootstrap flavor</option>
-        <option value="d">D · Bootstrap floating labels</option>
-      </select>
-      <button id="themeToggle" class="btn-ghost">🌗 Theme</button>
-    </header>
+  <header class="topbar">
+    <div class="brand">ERP Compact UI · Order List</div>
+    <button id="themeToggle">🌗 Theme</button>
+  </header>
 
-    <main class="container-grid">
-      <section class="panel" aria-label="Order list panel">
-        <div class="panel-head">
-          <span>Order List</span>
-          <small id="rowCount" class="muted">0 rows</small>
-        </div>
+  <section class="panel">
+    <div class="panel-head">
+      <span>Orders</span>
+      <small id="rowCount">0 rows</small>
+    </div>
 
-        <div class="toolbar">
-          <div class="field">
-            <label for="fCustomer">Customer</label>
-            <input id="fCustomer" placeholder="contains..." />
-          </div>
-          <div class="field">
-            <label for="fStatus">Status</label>
-            <select id="fStatus">
-              <option value="">All</option>
-              <option>Open</option>
-              <option>Closed</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="fMin">Min amount</label>
-            <input id="fMin" type="number" placeholder="0" />
-          </div>
-          <div class="field">
-            <label for="fSort">Sort by</label>
-            <select id="fSort">
-              <option value="date_desc">Date ↓</option>
-              <option value="date_asc">Date ↑</option>
-              <option value="amount_desc">Amount ↓</option>
-              <option value="amount_asc">Amount ↑</option>
-            </select>
-          </div>
-        </div>
+    <div class="toolbar">
+      <div class="field"><label>Customer</label><input id="fCustomer" placeholder="contains..." /></div>
+      <div class="field"><label>Status</label><select id="fStatus"><option value="">All</option><option>Open</option><option>Closed</option></select></div>
+      <div class="field"><label>Min amount</label><input id="fMin" type="number" /></div>
+      <div class="field"><label>Sort by</label><select id="fSort"><option value="date_desc">Date ↓</option><option value="date_asc">Date ↑</option><option value="amount_desc">Amount ↓</option><option value="amount_asc">Amount ↑</option></select></div>
+    </div>
 
-        <div class="table-wrap" id="listScroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th class="text-end">Amount</th>
-              </tr>
-            </thead>
-            <tbody id="listBody"></tbody>
-          </table>
-        </div>
+    <div class="table-wrap" id="listScroll">
+      <table>
+        <thead><tr><th>Order #</th><th>Date</th><th>Customer</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
 
-        <div class="agg-row">
-          <div><strong id="aggCount">0</strong> orders</div>
-          <div><strong id="aggOpen">0</strong> open</div>
-          <div><strong id="aggClosed">0</strong> closed</div>
-          <div>Total: <strong id="aggAmount">0.00</strong></div>
-        </div>
-      </section>
-
-      <section class="panel" aria-label="Order detail panel">
-        <div class="panel-head">
-          <span id="detailTitle">Order Detail</span>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <span id="modePill" class="mode-pill">Preview</span>
-            <button id="editToggle" class="btn-primary">Edit</button>
-          </div>
-        </div>
-
-        <div class="detail-body readonly" id="detailForm">
-          <fieldset>
-            <legend>Main</legend>
-            <div class="form-grid">
-              <div class="field floating">
-                <label for="orderNo">Order number</label>
-                <input data-editable id="orderNo" type="text" />
-              </div>
-              <div class="field floating">
-                <label for="customer">Customer (lookup)</label>
-                <input data-editable id="customer" list="customerList" />
-                <datalist id="customerList">
-                  <option>ACME Corp</option>
-                  <option>Northwind</option>
-                  <option>Globex</option>
-                </datalist>
-              </div>
-              <div class="field floating">
-                <label for="status">Status</label>
-                <select data-editable id="status">
-                  <option>Open</option>
-                  <option>Closed</option>
-                </select>
-              </div>
-              <div class="field floating">
-                <label for="amount">Amount</label>
-                <input data-editable id="amount" type="number" step="0.01" />
-              </div>
-              <div class="field floating">
-                <label for="orderDate">Date</label>
-                <input data-editable id="orderDate" type="date" />
-              </div>
-              <div class="field floating">
-                <label for="deliveryTime">Time</label>
-                <input data-editable id="deliveryTime" type="time" />
-              </div>
-              <div class="field floating">
-                <label for="appointment">DateTime</label>
-                <input data-editable id="appointment" type="datetime-local" />
-              </div>
-              <div class="field floating full">
-                <label for="note">Textarea note</label>
-                <textarea data-editable id="note" rows="2"></textarea>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Tabs</legend>
-            <div class="tabs">
-              <button class="tab active" data-tab="items">Items</button>
-              <button class="tab" data-tab="shipping">Shipping</button>
-            </div>
-            <div id="tab-items" class="tab-panel active">
-              <div class="input-grid">
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="width:44%">Product</th>
-                      <th style="width:18%">Qty</th>
-                      <th style="width:18%">Price</th>
-                      <th style="width:20%">Line Total</th>
-                    </tr>
-                  </thead>
-                  <tbody id="itemsBody"></tbody>
-                </table>
-              </div>
-            </div>
-            <div id="tab-shipping" class="tab-panel">
-              <div class="form-grid">
-                <div class="field"><label>Warehouse (select)</label><select data-editable><option>WH-01</option><option>WH-02</option></select></div>
-                <div class="field"><label>Carrier</label><input data-editable type="text" value="DHL" /></div>
-                <div class="field full"><label>Address</label><textarea data-editable rows="2">Main street 1</textarea></div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-      </section>
-    </main>
-  </div>
+    <div class="agg-row">
+      <div><strong id="aggCount">0</strong> orders</div>
+      <div><strong id="aggOpen">0</strong> open</div>
+      <div><strong id="aggClosed">0</strong> closed</div>
+      <div>Total: <strong id="aggAmount">0.00</strong></div>
+    </div>
+  </section>
 
   <script>
-    const state = {
-      allRows: [],
-      filteredRows: [],
-      page: 0,
-      pageSize: 40,
-      selectedId: null,
-      editMode: false
-    };
-
+    const state = {allRows: [], filteredRows: [], page:0, pageSize:40};
     const listBody = document.getElementById('listBody');
     const listScroll = document.getElementById('listScroll');
-    const rowCount = document.getElementById('rowCount');
 
     function generateRows(count = 500) {
       const customers = ['ACME Corp', 'Northwind', 'Globex', 'Initech', 'Umbrella', 'Soylent', 'Hooli'];
-      const rows = [];
-      for (let i = 1; i <= count; i++) {
-        const amount = +(Math.random() * 1900 + 100).toFixed(2);
-        const day = ((i % 28) + 1).toString().padStart(2, '0');
-        rows.push({
-          id: i,
-          no: `SO-${String(i).padStart(5, '0')}`,
+      return Array.from({length:count}, (_,i) => {
+        const id = i + 1;
+        const day = String((id % 28) + 1).padStart(2, '0');
+        return {
+          id,
+          no: `SO-${String(id).padStart(5, '0')}`,
           date: `2026-03-${day}`,
-          customer: customers[i % customers.length],
-          status: i % 3 === 0 ? 'Closed' : 'Open',
-          amount,
-          items: [
-            { product: 'Widget A', qty: 1 + (i % 4), price: 19.9 },
-            { product: 'Widget B', qty: 2 + (i % 3), price: 12.5 }
-          ],
-          note: 'Compact ERP demo order.'
-        });
-      }
-      return rows;
+          customer: customers[id % customers.length],
+          status: id % 3 === 0 ? 'Closed' : 'Open',
+          amount: +(Math.random() * 1900 + 100).toFixed(2)
+        };
+      });
     }
 
     function applyFilters() {
@@ -479,24 +105,12 @@
       const status = document.getElementById('fStatus').value;
       const min = parseFloat(document.getElementById('fMin').value || '0');
       const sort = document.getElementById('fSort').value;
-
-      state.filteredRows = state.allRows.filter(r =>
-        (!customer || r.customer.toLowerCase().includes(customer)) &&
-        (!status || r.status === status) &&
-        r.amount >= min
-      );
-
-      state.filteredRows.sort((a, b) => {
-        if (sort === 'date_desc') return b.date.localeCompare(a.date);
-        if (sort === 'date_asc') return a.date.localeCompare(b.date);
-        if (sort === 'amount_desc') return b.amount - a.amount;
-        return a.amount - b.amount;
-      });
-
+      state.filteredRows = state.allRows.filter(r => (!customer || r.customer.toLowerCase().includes(customer)) && (!status || r.status === status) && r.amount >= min);
+      state.filteredRows.sort((a,b) => sort==='date_desc'?b.date.localeCompare(a.date):sort==='date_asc'?a.date.localeCompare(b.date):sort==='amount_desc'?b.amount-a.amount:a.amount-b.amount);
       state.page = 0;
       listBody.innerHTML = '';
       renderNextPage();
-      updateAggregation();
+      updateAgg();
     }
 
     function renderNextPage() {
@@ -504,72 +118,21 @@
       const next = state.filteredRows.slice(start, start + state.pageSize);
       next.forEach(r => {
         const tr = document.createElement('tr');
-        tr.dataset.id = r.id;
-        if (r.id === state.selectedId) tr.classList.add('active');
-        tr.innerHTML = `
-          <td>${r.no}</td>
-          <td>${r.date}</td>
-          <td>${r.customer}</td>
-          <td><span class="status ${r.status === 'Open' ? 'status-open' : 'status-closed'}">${r.status}</span></td>
-          <td style="text-align:right">${r.amount.toFixed(2)}</td>
-        `;
-        tr.onclick = () => selectRow(r.id);
+        tr.innerHTML = `<td><a href="detail.html?id=${r.id}">${r.no}</a></td><td>${r.date}</td><td>${r.customer}</td><td><span class="status ${r.status==='Open'?'open':'closed'}">${r.status}</span></td><td>${r.amount.toFixed(2)}</td>`;
         listBody.appendChild(tr);
       });
       state.page++;
-      rowCount.textContent = `${state.filteredRows.length} rows`;
+      document.getElementById('rowCount').textContent = `${state.filteredRows.length} rows`;
     }
 
-    function updateAggregation() {
+    function updateAgg() {
       const count = state.filteredRows.length;
       const open = state.filteredRows.filter(r => r.status === 'Open').length;
-      const closed = count - open;
-      const total = state.filteredRows.reduce((s, r) => s + r.amount, 0);
+      const total = state.filteredRows.reduce((sum, r) => sum + r.amount, 0);
       document.getElementById('aggCount').textContent = count;
       document.getElementById('aggOpen').textContent = open;
-      document.getElementById('aggClosed').textContent = closed;
+      document.getElementById('aggClosed').textContent = count - open;
       document.getElementById('aggAmount').textContent = total.toFixed(2);
-    }
-
-    function selectRow(id) {
-      state.selectedId = id;
-      document.querySelectorAll('#listBody tr').forEach(tr => tr.classList.toggle('active', +tr.dataset.id === id));
-      const row = state.allRows.find(r => r.id === id);
-      if (!row) return;
-
-      document.getElementById('detailTitle').textContent = `Order Detail · ${row.no}`;
-      document.getElementById('orderNo').value = row.no;
-      document.getElementById('customer').value = row.customer;
-      document.getElementById('status').value = row.status;
-      document.getElementById('amount').value = row.amount;
-      document.getElementById('orderDate').value = row.date;
-      document.getElementById('deliveryTime').value = '10:30';
-      document.getElementById('appointment').value = `${row.date}T10:30`;
-      document.getElementById('note').value = row.note;
-
-      const itemsBody = document.getElementById('itemsBody');
-      itemsBody.innerHTML = '';
-      row.items.forEach(it => {
-        const tr = document.createElement('tr');
-        const lineTotal = (it.qty * it.price).toFixed(2);
-        tr.innerHTML = `
-          <td><input data-editable value="${it.product}"></td>
-          <td><input data-editable type="number" value="${it.qty}"></td>
-          <td><input data-editable type="number" step="0.01" value="${it.price}"></td>
-          <td style="text-align:right; padding-right:8px;">${lineTotal}</td>
-        `;
-        itemsBody.appendChild(tr);
-      });
-    }
-
-    function toggleEditMode() {
-      state.editMode = !state.editMode;
-      const form = document.getElementById('detailForm');
-      const btn = document.getElementById('editToggle');
-      const modePill = document.getElementById('modePill');
-      form.classList.toggle('readonly', !state.editMode);
-      btn.textContent = state.editMode ? 'Preview' : 'Edit';
-      modePill.textContent = state.editMode ? 'Edit' : 'Preview';
     }
 
     document.getElementById('themeToggle').onclick = () => {
@@ -577,36 +140,19 @@
       html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
     };
 
-    document.getElementById('variantSelect').onchange = (e) => {
-      document.documentElement.dataset.variant = e.target.value;
-    };
-
-    document.getElementById('editToggle').onclick = toggleEditMode;
-
-    ['fCustomer', 'fStatus', 'fMin', 'fSort'].forEach(id => {
-      document.getElementById(id).addEventListener('input', applyFilters);
-      document.getElementById(id).addEventListener('change', applyFilters);
+    ['fCustomer','fStatus','fMin','fSort'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', applyFilters);
+      el.addEventListener('change', applyFilters);
     });
 
     listScroll.addEventListener('scroll', () => {
       const nearBottom = listScroll.scrollTop + listScroll.clientHeight >= listScroll.scrollHeight - 40;
-      if (nearBottom && state.page * state.pageSize < state.filteredRows.length) {
-        renderNextPage();
-      }
-    });
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.onclick = () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-      };
+      if (nearBottom && state.page * state.pageSize < state.filteredRows.length) renderNextPage();
     });
 
     state.allRows = generateRows();
     applyFilters();
-    selectRow(state.filteredRows[0]?.id || 1);
   </script>
 </body>
 </html>
