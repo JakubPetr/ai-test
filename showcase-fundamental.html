@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Showcase · Fundamental Styles ERP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fundamental-styles@0.41.0/dist/fundamental-styles.css" />
+  <style>
+    body { margin: 0; font-family: "72", "Segoe UI", sans-serif; font-size: 13px; background: #f5f7fa; }
+    .wrap { padding: 10px; }
+    .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap:10px; }
+    .box { background:#fff; border:1px solid #d5dadd; border-radius:6px; }
+    .head { padding:8px 10px; border-bottom:1px solid #e5e8eb; font-weight:600; }
+    .body { padding:8px 10px; }
+    .toolbar { display:grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap:8px; }
+    table { width:100%; border-collapse:collapse; }
+    th,td { padding:7px; border-bottom:1px solid #eef1f4; text-align:left; }
+    .muted { color:#6a6d70; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="fd-title fd-title--h5">Fundamental Styles Standalone Showcase</div>
+    <div class="grid">
+      <section class="box">
+        <div class="head">Order List</div>
+        <div class="body toolbar">
+          <label class="fd-form-label">Customer<input class="fd-input" placeholder="contains..."></label>
+          <label class="fd-form-label">Status<select class="fd-select"><option>All</option><option>Open</option><option>Closed</option></select></label>
+          <label class="fd-form-label">Min amount<input type="number" class="fd-input"></label>
+          <label class="fd-form-label">Sort<select class="fd-select"><option>Date ↓</option><option>Date ↑</option></select></label>
+        </div>
+        <div class="body" style="max-height:60vh;overflow:auto;">
+          <table>
+            <thead><tr><th>No</th><th>Date</th><th>Customer</th><th>Status</th><th>Amount</th></tr></thead>
+            <tbody>
+              <tr><td>SO-00001</td><td>2026-03-10</td><td>ACME Corp</td><td><span class="fd-tag">Open</span></td><td>425.10</td></tr>
+              <tr><td>SO-00002</td><td>2026-03-11</td><td>Northwind</td><td><span class="fd-tag fd-tag--positive">Closed</span></td><td>712.55</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="box">
+        <div class="head">Order Detail</div>
+        <div class="body">
+          <fieldset class="fd-fieldset">
+            <legend class="fd-fieldset__legend">Main</legend>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <label class="fd-form-label">Order number<input class="fd-input" value="SO-00001"></label>
+              <label class="fd-form-label">Lookup<input class="fd-input" value="ACME Corp"></label>
+              <label class="fd-form-label">Date<input type="date" class="fd-input" value="2026-03-10"></label>
+              <label class="fd-form-label">Time<input type="time" class="fd-input" value="10:30"></label>
+              <label class="fd-form-label">DateTime<input type="datetime-local" class="fd-input" value="2026-03-10T10:30"></label>
+              <label class="fd-form-label">Status<select class="fd-select"><option>Open</option><option>Closed</option></select></label>
+              <label class="fd-form-label" style="grid-column:1/-1;">Note<textarea class="fd-textarea">Compact ERP demo.</textarea></label>
+            </div>
+          </fieldset>
+          <p class="muted">This file is standalone and focused on Fundamental-styles flavor.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

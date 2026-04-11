@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Showcase · Bootstrap ERP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <style>
+    body { font-size: 13px; }
+    .erp-shell { min-height: 100vh; background: var(--bs-body-bg); }
+    .sticky-head th { position: sticky; top: 0; background: var(--bs-body-bg); z-index: 1; }
+    .status-pill { font-size: 11px; }
+  </style>
+</head>
+<body>
+<div class="erp-shell p-2 p-md-3">
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="h6 m-0">Bootstrap Standalone Showcase</h1>
+    <button id="theme" class="btn btn-sm btn-outline-secondary ms-auto">Toggle theme</button>
+  </div>
+
+  <div class="row g-2">
+    <div class="col-lg-7">
+      <div class="card h-100">
+        <div class="card-header py-2 d-flex justify-content-between"><strong>Orders</strong><small id="count"></small></div>
+        <div class="card-body p-2 border-bottom">
+          <div class="row g-2">
+            <div class="col-md-4"><div class="form-floating"><input id="fCustomer" class="form-control" placeholder="Customer" /><label for="fCustomer">Customer</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><select id="fStatus" class="form-select"><option value="">All</option><option>Open</option><option>Closed</option></select><label for="fStatus">Status</label></div></div>
+            <div class="col-md-2"><div class="form-floating"><input id="fMin" type="number" class="form-control" placeholder="Min" /><label for="fMin">Min amount</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><select id="fSort" class="form-select"><option value="date_desc">Date ↓</option><option value="date_asc">Date ↑</option><option value="amount_desc">Amount ↓</option><option value="amount_asc">Amount ↑</option></select><label for="fSort">Sort</label></div></div>
+          </div>
+        </div>
+        <div id="scroll" class="table-responsive" style="max-height:55vh;">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="sticky-head"><tr><th>No</th><th>Date</th><th>Customer</th><th>Status</th><th class="text-end">Amount</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="card-header py-2 d-flex justify-content-between align-items-center"><strong id="title">Detail</strong><button class="btn btn-sm btn-primary">Edit</button></div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-md-6"><div class="form-floating"><input class="form-control" placeholder="Order number" value="SO-00001"/><label>Order number</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input class="form-control" list="look" placeholder="Customer" value="ACME Corp"/><label>Lookup customer</label></div><datalist id="look"><option>ACME Corp</option><option>Northwind</option></datalist></div>
+            <div class="col-md-6"><div class="form-floating"><input class="form-control" type="date" placeholder="Date" value="2026-03-10"/><label>Date</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input class="form-control" type="time" placeholder="Time" value="10:30"/><label>Time</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input class="form-control" type="datetime-local" placeholder="DateTime" value="2026-03-10T10:30"/><label>DateTime</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><select class="form-select"><option>Open</option><option>Closed</option></select><label>Status</label></div></div>
+            <div class="col-12"><div class="form-floating"><textarea class="form-control" placeholder="Note" style="height: 72px"></textarea><label>Textarea</label></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const s={all:[],filtered:[],page:0,size:40};
+const rows=document.getElementById('rows'), sc=document.getElementById('scroll');
+function data(n=200){const c=['ACME Corp','Northwind','Globex'];return Array.from({length:n},(_,i)=>({id:i+1,no:`SO-${String(i+1).padStart(5,'0')}`,date:`2026-03-${String((i%28)+1).padStart(2,'0')}`,customer:c[i%c.length],status:i%3?'Open':'Closed',amount:+(Math.random()*900+100).toFixed(2)}));}
+function filter(){const c=document.getElementById('fCustomer').value.toLowerCase(),st=document.getElementById('fStatus').value,m=+(document.getElementById('fMin').value||0),so=document.getElementById('fSort').value;s.filtered=s.all.filter(r=>(!c||r.customer.toLowerCase().includes(c))&&(!st||r.status===st)&&r.amount>=m);s.filtered.sort((a,b)=>so==='date_desc'?b.date.localeCompare(a.date):so==='date_asc'?a.date.localeCompare(b.date):so==='amount_desc'?b.amount-a.amount:a.amount-b.amount);s.page=0;rows.innerHTML='';next();document.getElementById('count').textContent=`${s.filtered.length} rows`;}
+function next(){const start=s.page*s.size;for(const r of s.filtered.slice(start,start+s.size)){const tr=document.createElement('tr');tr.innerHTML=`<td>${r.no}</td><td>${r.date}</td><td>${r.customer}</td><td><span class="badge text-bg-${r.status==='Open'?'warning':'success'} status-pill">${r.status}</span></td><td class="text-end">${r.amount.toFixed(2)}</td>`;rows.appendChild(tr);}s.page++;}
+['fCustomer','fStatus','fMin','fSort'].forEach(id=>document.getElementById(id).addEventListener('input',filter));
+sc.addEventListener('scroll',()=>{if(sc.scrollTop+sc.clientHeight>=sc.scrollHeight-30 && s.page*s.size<s.filtered.length)next();});
+document.getElementById('theme').onclick=()=>{document.documentElement.setAttribute('data-bs-theme',document.documentElement.getAttribute('data-bs-theme')==='light'?'dark':'light');};
+s.all=data();filter();
+</script>
+</body>
+</html>

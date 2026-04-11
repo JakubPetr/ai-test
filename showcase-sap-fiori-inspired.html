@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Showcase · SAP Fiori Inspired ERP</title>
+  <style>
+    :root { --bg:#f7f9fb; --surface:#fff; --line:#dfe5ec; --text:#1f2d3d; --muted:#5f748a; --accent:#0a6ed1; }
+    html[data-theme="dark"] { --bg:#0f1720; --surface:#172230; --line:#2b3b4f; --text:#dce7f3; --muted:#9ab1c8; --accent:#58a6ff; }
+    body { margin:0; font: 13px/1.35 "72", "Segoe UI", sans-serif; background:var(--bg); color:var(--text); }
+    .bar { height:48px; display:flex; align-items:center; gap:8px; padding:0 12px; background:var(--surface); border-bottom:1px solid var(--line); }
+    .brand { font-weight:700; letter-spacing:.2px; margin-right:auto; }
+    .btn { border:1px solid var(--line); background:var(--surface); color:var(--text); padding:5px 9px; border-radius:6px; }
+    .shell { padding:10px; display:grid; grid-template-columns:1.25fr .75fr; gap:10px; }
+    .panel { background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+    .head { padding:8px 10px; border-bottom:1px solid var(--line); font-weight:600; }
+    .body { padding:8px 10px; }
+    .toolbar { display:grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap:6px; }
+    .field { display:grid; gap:4px; }
+    .field label { font-size:11px; color:var(--muted); text-transform:uppercase; }
+    .field input,.field select,.field textarea { border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:6px; padding:6px 7px; font:inherit; }
+    table { width:100%; border-collapse: collapse; }
+    th,td { padding:7px 8px; border-bottom:1px solid var(--line); }
+    th { text-align:left; color:var(--muted); font-weight:600; }
+    .badge { font-size:11px; padding:1px 7px; border-radius:12px; background:#e8f2fd; color:var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">SAP Fiori Inspired Standalone Showcase</div>
+    <button class="btn" id="theme">Toggle theme</button>
+  </header>
+
+  <main class="shell">
+    <section class="panel">
+      <div class="head">Order List</div>
+      <div class="body toolbar">
+        <div class="field"><label>Customer</label><input placeholder="contains..."></div>
+        <div class="field"><label>Status</label><select><option>All</option><option>Open</option><option>Closed</option></select></div>
+        <div class="field"><label>Min amount</label><input type="number"></div>
+        <div class="field"><label>Sort</label><select><option>Date ↓</option><option>Amount ↓</option></select></div>
+      </div>
+      <div class="body">
+        <table>
+          <thead><tr><th>No</th><th>Date</th><th>Customer</th><th>Status</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>SO-00001</td><td>2026-03-10</td><td>ACME Corp</td><td><span class="badge">Open</span></td><td>425.10</td></tr>
+            <tr><td>SO-00002</td><td>2026-03-11</td><td>Northwind</td><td><span class="badge">Closed</span></td><td>712.55</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="head">Detail</div>
+      <div class="body" style="display:grid; gap:8px;">
+        <div class="field"><label>Order number</label><input value="SO-00001"></div>
+        <div class="field"><label>Lookup</label><input value="ACME Corp"></div>
+        <div class="field"><label>Date</label><input type="date" value="2026-03-10"></div>
+        <div class="field"><label>Date Time</label><input type="datetime-local" value="2026-03-10T10:30"></div>
+        <div class="field"><label>Time</label><input type="time" value="10:30"></div>
+        <div class="field"><label>Note</label><textarea rows="3">Compact ERP demo.</textarea></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('theme').onclick = () => {
+      const h = document.documentElement;
+      h.dataset.theme = h.dataset.theme === 'light' ? 'dark' : 'light';
+    };
+  </script>
+</body>
+</html>
